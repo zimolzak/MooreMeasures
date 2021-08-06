@@ -21,12 +21,12 @@ SET @Lookback_Length_Days = -30
 SET @CareHx_Length_Months = 24
 
 -- Create Parameter Table
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_ParameterTable') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_ParameterTable') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_ParameterTable
+		DROP TABLE Dflt._ppkprd_CRC_2019n_ParameterTable
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_ParameterTable
+CREATE TABLE Dflt._ppkprd_CRC_2019n_ParameterTable
 (
 	Search_Start DATETIME2
 	,Search_Length_Months INT
@@ -36,7 +36,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_ParameterTable
 )
 
 -- Insert Variables into Parameter Table
-INSERT INTO Dflt._ppkprd_LCa_2019n_ParameterTable
+INSERT INTO Dflt._ppkprd_CRC_2019n_ParameterTable
 (
 	Search_Start
 	,Search_Length_Months
@@ -59,37 +59,37 @@ GO
 
 -- PLANNED HOSPITALIZATION ICD-10-CM + ICD-10-PCS CODES TABLES ====================================
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
+		DROP TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
+CREATE TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
 (
 	ICD10CMCode VARCHAR(50)
 )
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
+		DROP TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
+CREATE TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
 (
 	ICD10PCSCode VARCHAR(50)
 )
 
 -- Compile codes
-INSERT INTO Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
+INSERT INTO Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
 SELECT ex.[ICD-10-CM Code]
 FROM Dflt._ppku_EncounterTypeICD_T1_Plan_T1_AlwaysPlannedConditions AS ex
 
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
+INSERT INTO Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
 SELECT ex.[ICD-10-PCS CODE]
 FROM Dflt._ppku_EncounterTypeICD_T1_Plan_T1_AlwaysPlannedProcedures AS ex
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
+INSERT INTO Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
 SELECT ex.[ICD-10-PCS CODE]
 FROM Dflt._ppku_EncounterTypeICD_T1_Plan_T1_SometimesPlannedProcedures AS ex
 
@@ -108,18 +108,18 @@ GO
 DECLARE @STEP01_SearchStart DATETIME2
 DECLARE @STEP01_SearchEnd DATETIME2
 
-SET @STEP01_SearchStart = (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params)
-SET @STEP01_SearchEnd = DATEADD(MONTH, (SELECT params.Search_Length_Months FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params))
+SET @STEP01_SearchStart = (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params)
+SET @STEP01_SearchEnd = DATEADD(MONTH, (SELECT params.Search_Length_Months FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params))
 
 PRINT CHAR(13) + CHAR(10) + 'Step 01 - Search Period Start: ' + CAST(@STEP01_SearchStart AS VARCHAR)
 PRINT 'Step 01 - Search Period End: ' + CAST(@STEP01_SearchEnd AS VARCHAR)
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -131,7 +131,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
 )
 
 -- Get outpatient encounters with a diagnostic code associated with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 SELECT DISTINCT
 	sp.PatientSSN
 	,owl.PatientSID
@@ -161,17 +161,17 @@ FROM
 WHERE											
 	(
 		(
-			--icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'	-- COLORECTAL CANCER
+			icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'	-- COLORECTAL CANCER
 			--OR
-			icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
+			--icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
 			--OR
 			--icd10.ICD10Code LIKE '%C61%'		-- PROSTATE CANCER
 		)
 		OR
 		(
-			--icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
+			icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
 			--OR
-			icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
+			--icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
 			--OR
 			--icd9.ICD9Code LIKE '185%'			-- PROSTATE CANCER
 		)
@@ -183,7 +183,7 @@ WHERE
 		@STEP01_SearchEnd
 
 -- Get inpatient encounters with a diagnostic code associated with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 SELECT DISTINCT
 	sp.PatientSSN	
 	,inp.PatientSID
@@ -212,17 +212,17 @@ FROM
 WHERE
 	(
 		(
-			--icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
+			icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
 			--OR
-			icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
+			--icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
 			--OR
 			--icd10.ICD10Code LIKE '%C61%'		-- PROSTATE CANCER
 		)
 		OR
 		(
-			--icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
+			icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
 			--OR
-			icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
+			--icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
 			--OR
 			--icd9.ICD9Code LIKE '185%'			-- PROSTATE CANCER
 		)
@@ -234,7 +234,7 @@ WHERE
 		@STEP01_SearchEnd
 
 -- Get cancer registry entries associated with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 SELECT DISTINCT
 	sp.PatientSSN
 	,reg.PatientSID
@@ -255,9 +255,9 @@ WHERE
 		@STEP01_SearchEnd
 	AND
 	(
-		--(reg.SitegpX LIKE 'COLO%' OR reg.ICDOSite LIKE 'COLO%' OR reg.PrimarysiteX LIKE 'COLO%') OR (reg.SitegpX LIKE 'RECT%' OR reg.ICDOSite LIKE 'RECT%' OR reg.PrimarysiteX LIKE 'RECT%')
+		(reg.SitegpX LIKE 'COLO%' OR reg.ICDOSite LIKE 'COLO%' OR reg.PrimarysiteX LIKE 'COLO%') OR (reg.SitegpX LIKE 'RECT%' OR reg.ICDOSite LIKE 'RECT%' OR reg.PrimarysiteX LIKE 'RECT%')
 		--OR
-		(reg.SitegpX LIKE 'LUNG%' OR reg.ICDOSite LIKE 'LUNG%' OR reg.PrimarysiteX LIKE 'LUNG%')
+		--(reg.SitegpX LIKE 'LUNG%' OR reg.ICDOSite LIKE 'LUNG%' OR reg.PrimarysiteX LIKE 'LUNG%')
 		--OR
 		--(reg.SitegpX LIKE 'PROSTATE%' OR reg.ICDOSite LIKE 'PROSTATE%' OR reg.PrimarysiteX LIKE 'PROSTATE%')
 	)
@@ -272,18 +272,18 @@ GO
 DECLARE @STEP02_ExcludeStart DATETIME2
 DECLARE @STEP02_ExcludeEnd DATETIME2
 
-SET @STEP02_ExcludeStart = DATEADD(YEAR, (SELECT params.Exclude_Length_Years FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params))
-SET @STEP02_ExcludeEnd = (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params)
+SET @STEP02_ExcludeStart = DATEADD(YEAR, (SELECT params.Exclude_Length_Years FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params))
+SET @STEP02_ExcludeEnd = (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params)
 
 PRINT CHAR(13) + CHAR(10) + 'Step 02 - Exclusion Period Start: ' + CAST(@STEP02_ExcludeStart AS VARCHAR)
 PRINT 'Step 02 - Exclusion Period End: ' + CAST(@STEP02_ExcludeEnd AS VARCHAR)
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -293,7 +293,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
 )
 
 -- Get outpatient encounters with a diagnostic code associated with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 SELECT DISTINCT
 	sp.PatientSSN
 	,owl.PatientSID
@@ -320,17 +320,17 @@ FROM
 WHERE
 	(
 		(
-			--icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
+			icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
 			--OR
-			icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
+			--icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
 			--OR
 			--icd10.ICD10Code LIKE '%C61%'		-- PROSTATE CANCER
 		)
 		OR
 		(
-			--icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
+			icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
 			--OR
-			icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
+			--icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
 			--OR
 			--icd9.ICD9Code LIKE '185%'			-- PROSTATE CANCER
 		)
@@ -344,11 +344,11 @@ WHERE
 	owl.PatientSID IN
 	(
 		select t.PatientSID
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z AS t
 	)
 
 -- Get inpatient encounters with a diagnostic code associated with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 SELECT DISTINCT
 	sp.PatientSSN	
 	,inp.PatientSID
@@ -375,17 +375,17 @@ FROM
 WHERE
 	(
 		(
-			--icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
+			icd10.ICD10Code LIKE '%C18%' OR icd10.ICD10Code LIKE '%C19%' OR icd10.ICD10Code LIKE '%C20%'		-- COLORECTAL CANCER
 			--OR
-			icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
+			--icd10.ICD10Code LIKE '%C34%'		-- LUNG CANCER
 			--OR
 			--icd10.ICD10Code LIKE '%C61%'		-- PROSTATE CANCER
 		)
 		OR
 		(
-			--icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
+			icd9.ICD9Code LIKE '153%' OR icd9.ICD9Code LIKE '154.0%' OR icd9.ICD9Code LIKE '154.1%'		-- COLORECTAL CANCER
 			--OR
-			icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
+			--icd9.ICD9Code LIKE '162%'			-- LUNG CANCER
 			--OR
 			--icd9.ICD9Code LIKE '185%'			-- PROSTATE CANCER
 		)
@@ -399,11 +399,11 @@ WHERE
 	inp.PatientSID IN
 	(
 		select t.PatientSID
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z AS t
 	)
 
 -- Get cancer registry entries with the cancer of study
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 SELECT DISTINCT
 	sp.PatientSSN
 	,reg.PatientSID
@@ -422,9 +422,9 @@ WHERE
 		@STEP02_ExcludeEnd
 	AND
 	(
-		--(reg.SitegpX LIKE 'COLO%' OR reg.ICDOSite LIKE 'COLO%' OR reg.PrimarysiteX LIKE 'COLO%') OR (reg.SitegpX LIKE 'RECT%' OR reg.ICDOSite LIKE 'RECT%' OR reg.PrimarysiteX LIKE 'RECT%')
+		(reg.SitegpX LIKE 'COLO%' OR reg.ICDOSite LIKE 'COLO%' OR reg.PrimarysiteX LIKE 'COLO%') OR (reg.SitegpX LIKE 'RECT%' OR reg.ICDOSite LIKE 'RECT%' OR reg.PrimarysiteX LIKE 'RECT%')
 		--OR
-		(reg.SitegpX LIKE 'LUNG%' OR reg.ICDOSite LIKE 'LUNG%' OR reg.PrimarysiteX LIKE 'LUNG%')
+		--(reg.SitegpX LIKE 'LUNG%' OR reg.ICDOSite LIKE 'LUNG%' OR reg.PrimarysiteX LIKE 'LUNG%')
 		--OR
 		--(reg.SitegpX LIKE 'PROSTATE%' OR reg.ICDOSite LIKE 'PROSTATE%' OR reg.PrimarysiteX LIKE 'PROSTATE%')
 	)
@@ -432,7 +432,7 @@ WHERE
 	reg.PatientSID IN
 	(
 		select t.PatientSID
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z AS t
 	)
 -- <<<<!CANCER SELECTION ZONE END!>>>>
 GO
@@ -442,21 +442,21 @@ GO
 
 -- I.03.A ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A
 (
 	PatientSSN VARCHAR(10)
 )
 
 -- Get SSNs of patients in the search period that had cancer records in the exclusion period
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A
 SELECT DISTINCT srch.PatientSSN
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z AS srch INNER JOIN Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z AS exc ON
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z AS srch INNER JOIN Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z AS exc ON
 	(
 		srch.PatientSSN = exc.PatientSSN
 	)
@@ -466,12 +466,12 @@ FROM
 
 -- I.03.B ---------------------------------------------------------------------------------------- 
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -485,7 +485,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z
 
 /* Get cancer records from search period that don't belong to the list
 of patients identified in iSTEP 03 PART A */
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z
 SELECT DISTINCT
 	srch.PatientSSN
 	,srch.PatientSID
@@ -495,12 +495,12 @@ SELECT DISTINCT
 	,srch.StageOfCancer
 	,srch.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z AS srch
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z AS srch
 WHERE
 	srch.PatientSSN NOT IN
 	(
 		SELECT t.PatientSSN
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A AS t
 	)
 
 GO
@@ -510,12 +510,12 @@ GO
 
 -- I.04.A ---------------------------------------------------------------------------------------- 
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -527,7 +527,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A
 )
 
 -- Get all registry diagnosis events from iSTEP 03 PART Z
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A
 SELECT DISTINCT
 	dx.PatientSSN
 	,dx.PatientSID
@@ -537,7 +537,7 @@ SELECT DISTINCT
 	,dx.StageOfCancer
 	,dx.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z AS dx
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z AS dx
 WHERE dx.TypeOfEvent = 'REGISTRY ENTRY'
 
 
@@ -545,12 +545,12 @@ WHERE dx.TypeOfEvent = 'REGISTRY ENTRY'
 
 -- I.04.B ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -563,7 +563,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B
 
 /* Get all first-time ICD occurence diagnosis events from iSTEP 03
 PART Z for patients not in iSTEP 04 PART A */
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B
 SELECT DISTINCT
 	dx.PatientSSN
 	,dx.PatientSID
@@ -573,12 +573,12 @@ SELECT DISTINCT
 	,dx.StageOfCancer
 	,dx.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z AS dx
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z AS dx
 WHERE
 	dx.PatientSSN NOT IN
 	(
 		SELECT t.PatientSSN
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A AS t
 	)
 
 
@@ -586,12 +586,12 @@ WHERE
 
 -- I.04.C ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -603,7 +603,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
 )
 
 -- For each patient, get the earliest diagnosis event from STEP 04 PART A
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z
 SELECT DISTINCT
 	reg_dx.PatientSSN
 	,reg_dx.PatientSID
@@ -613,18 +613,18 @@ SELECT DISTINCT
 	,reg_dx.StageOfCancer
 	,reg_dx.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A AS reg_dx
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A AS reg_dx
 WHERE
 	reg_dx.DiagnosisEventDateTime = 
 	(
 		SELECT TOP 1 t.DiagnosisEventDateTime
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A AS t
 		WHERE reg_dx.PatientSSN = t.PatientSSN
 		ORDER BY t.DiagnosisEventDateTime ASC
 	)
 
 -- For each patient, get the earliest diagnosis event from STEP 04 PART B
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z
 SELECT DISTINCT
 	icd_dx.PatientSSN
 	,icd_dx.PatientSID
@@ -634,12 +634,12 @@ SELECT DISTINCT
 	,icd_dx.StageOfCancer
 	,icd_dx.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B AS icd_dx
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B AS icd_dx
 WHERE
 	icd_dx.DiagnosisEventDateTime = 
 	(
 		SELECT TOP 1 t.DiagnosisEventDateTime
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B AS t
 		WHERE icd_dx.PatientSSN = t.PatientSSN
 		ORDER BY t.DiagnosisEventDateTime ASC
 	)
@@ -655,18 +655,18 @@ GO
 DECLARE @STEP05_SearchStart DATETIME2
 DECLARE @STEP05_SearchEnd DATETIME2
 
-SET @STEP05_SearchStart = DATEADD(DAY, (SELECT params.Lookback_Length_Days FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params))
-SET @STEP05_SearchEnd = DATEADD(MONTH, (SELECT params.Search_Length_Months FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params))
+SET @STEP05_SearchStart = DATEADD(DAY, (SELECT params.Lookback_Length_Days FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params))
+SET @STEP05_SearchEnd = DATEADD(MONTH, (SELECT params.Search_Length_Months FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params), (SELECT params.Search_Start FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params))
 
 PRINT CHAR(13) + CHAR(10) + 'Step 05 - Emergency Care Search Period Start: ' + CAST(@STEP05_SearchStart AS VARCHAR)
 PRINT 'Step 05 - Emergency Care Search Period End: ' + CAST(@STEP05_SearchEnd AS VARCHAR)
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -676,7 +676,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A
 )
 
 -- Get all inpatient visits that fall under the Emergency Care (EC) search period
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A
 SELECT DISTINCT
 	sp.PatientSSN
 	,inp.PatientSID
@@ -697,7 +697,7 @@ WHERE
 	sp.PatientSSN IN
 	(
 		SELECT t.PatientSSN
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z AS t
 	)
 
 
@@ -705,23 +705,23 @@ WHERE
 
 -- I.05.B ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B
 (
 	PatientSSN VARCHAR(10)
 	,ECEventSID BIGINT
 )
 
 -- Select all Emergency Care events with a ICD-10-CM code implying planned admission
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B
 SELECT DISTINCT
 	ec.PatientSSN
 	,ec.ECEventSID
-FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A AS ec INNER JOIN Src.Inpat_InpatientDiagnosis AS inpd ON 
+FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A AS ec INNER JOIN Src.Inpat_InpatientDiagnosis AS inpd ON 
 	(
 		ec.ECEventSID = inpd.InpatientSID
 	)
@@ -733,15 +733,15 @@ WHERE
 	REPLACE(icd10.ICD10Code, '.', '') IN 
 		(
 			SELECT t.ICD10CMCode
-			FROM Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes AS t
+			FROM Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes AS t
 		)
 
 -- Select all Emergency Care events with a ICD-10-PCS code implying planned admission
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B
 SELECT DISTINCT
 	ec.PatientSSN
 	,ec.ECEventSID
-FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A AS ec INNER JOIN Src.Inpat_InpatientICDProcedure AS inpip ON 
+FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A AS ec INNER JOIN Src.Inpat_InpatientICDProcedure AS inpip ON 
 	(
 		ec.ECEventSID = inpip.InpatientSID
 	)
@@ -753,7 +753,7 @@ WHERE
 	REPLACE(icd10p.ICD10ProcedureCode, '.', '') IN 
 		(
 			SELECT t.ICD10PCSCode
-			FROM Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes AS t
+			FROM Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes AS t
 		)
 
 
@@ -762,12 +762,12 @@ WHERE
 -- I.05.C ----------------------------------------------------------------------------------------
 
 -- Create tables 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -779,7 +779,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C
 
 
 -- Get ED encounter records from search period
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C
 SELECT DISTINCT
 	sp.PatientSSN
 	,edl.PatientSID
@@ -802,7 +802,7 @@ WHERE
 	sp.PatientSSN IN
 	(
 		SELECT t.PatientSSN
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z AS t
 	)
 
 
@@ -812,12 +812,12 @@ WHERE
 -- I.05.D ----------------------------------------------------------------------------------------
 
 -- Create tables 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -827,7 +827,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D
 
 
 -- Get inpatient encounter records in relevant period
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D
 SELECT DISTINCT
 	sp.PatientSSN
 	,inp.PatientSID
@@ -848,7 +848,7 @@ WHERE
 	sp.PatientSSN IN
 	(
 		SELECT t.PatientSSN
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z AS t
 	)
 
 
@@ -857,23 +857,23 @@ WHERE
 -- I.05.E ----------------------------------------------------------------------------------------
 
 -- Create tables 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E
 (
 	ECEventSID BIGINT
 )
 
 
 -- Get records from STEP05_C that are followed by records from STEP05_D
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E
 SELECT DISTINCT
 	prev.ECEventSID
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C AS prev INNER JOIN Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D AS ex_inp ON
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C AS prev INNER JOIN Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D AS ex_inp ON
 	(
 		prev.PatientSID = ex_inp.PatientSID
 		AND
@@ -889,12 +889,12 @@ FROM
 -- I.05.F ----------------------------------------------------------------------------------------
 
 -- Create tables 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -906,7 +906,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F
 
 
 -- Get records from STEP05_C that aren't in STEP05_E
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F
 SELECT DISTINCT
 	prev.PatientSSN
 	,prev.PatientSID
@@ -914,12 +914,12 @@ SELECT DISTINCT
 	,prev.ECEventDateTime
 	,prev.ECEventEndDateTime
 	,prev.TypeOfEvent
-FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C AS prev
+FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C AS prev
 WHERE
 	prev.ECEventSID NOT IN 
 	(
 		SELECT t.ECEventSID
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E AS t
 	)
 
 
@@ -927,12 +927,12 @@ WHERE
 
 -- I.05.G ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -943,7 +943,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
 
 /* Select all Emergency Care events in iSTEP 05 PART A that were not
 identified as being planned in iSTEP 05 PART B */
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z
 SELECT DISTINCT
 	ec.PatientSSN
 	,ec.PatientSID
@@ -951,15 +951,15 @@ SELECT DISTINCT
 	,ec.ECEventDateTime
 	,ec.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A AS ec
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A AS ec
 WHERE
 	ec.ECEventSID NOT IN
 	(
 		SELECT pec.ECEventSID
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B AS pec
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B AS pec
 	)
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z
 SELECT DISTINCT
 	ec.PatientSSN
 	,ec.PatientSID
@@ -967,7 +967,7 @@ SELECT DISTINCT
 	,ec.ECEventDateTime
 	,ec.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F AS ec
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F AS ec
 
 GO
 
@@ -976,12 +976,12 @@ GO
 
 -- I.06.A ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -998,7 +998,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A
 /* Select dyads of Emergency Care events and Diagnosis Events such
 that the Emergency Care precedes the Diagnosis Event by at most 30
 days (and by at least 0 days; i.e., on the day of). */
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A
 SELECT DISTINCT
 	dx.PatientSSN
 	,dx.PatientSID
@@ -1011,12 +1011,12 @@ SELECT DISTINCT
 	,ec.ECEventDateTime
 	,ec.TypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z AS dx INNER JOIN Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z AS ec ON
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z AS dx INNER JOIN Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z AS ec ON
 	(
 		dx.PatientSSN = ec.PatientSSN
 		AND
 		ec.ECEventDateTime BETWEEN
-			DATEADD(DAY, (SELECT params.Lookback_Length_Days FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params), dx.DiagnosisEventDateTime)
+			DATEADD(DAY, (SELECT params.Lookback_Length_Days FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params), dx.DiagnosisEventDateTime)
 			AND
 			dx.DiagnosisEventDateTime
 	)
@@ -1026,12 +1026,12 @@ FROM
 
 -- I.06.B ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1046,7 +1046,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z
 )
 
 -- For each patient, select the dyad with the latest emergency care event from iSTEP 06 PART A
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z
 SELECT DISTINCT
 	ecdx.PatientSSN
 	,ecdx.PatientSID
@@ -1059,12 +1059,12 @@ SELECT DISTINCT
 	,ecdx.ECEventDateTime
 	,ecdx.ECTypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A AS ecdx
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A AS ecdx
 WHERE
 	ecdx.ECEventDateTime = 
 	(
 		SELECT TOP 1 t.ECEventDateTime
-		FROM Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A AS t
 		WHERE ecdx.PatientSSN = t.PatientSSN
 		ORDER BY t.ECEventDateTime DESC
 	)
@@ -1076,12 +1076,12 @@ GO
 
 -- I.07 ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL
+CREATE TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1096,7 +1096,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL
 )
 
 -- Save records after the inclusion steps
-INSERT INTO Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL
+INSERT INTO Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL
 SELECT DISTINCT
 	prev.PatientSSN
 	,prev.PatientSID
@@ -1109,7 +1109,7 @@ SELECT DISTINCT
 	,prev.ECEventDateTime
 	,prev.ECTypeOfEvent
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z AS prev
+	Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z AS prev
 
 GO
 
@@ -1122,12 +1122,12 @@ GO
 
 -- II.01.A ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1142,7 +1142,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A
 )
 
 -- Get all historical outpatient records for patients
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A
 SELECT DISTINCT
 	inc.PatientSSN
 	,inc.PatientSID
@@ -1155,7 +1155,7 @@ SELECT DISTINCT
 	,owl.VisitDateTime
 	,'PCP'
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL AS inc INNER JOIN Src.SPatient_SPatient AS sp ON
+	Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL AS inc INNER JOIN Src.SPatient_SPatient AS sp ON
 	(
 		inc.PatientSSN = sp.PatientSSN
 		AND
@@ -1251,12 +1251,12 @@ WHERE
 
 -- II.01.B ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1272,17 +1272,17 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1
 )
 
 -- For each patient, get the earliest historical event from eSTEP 01 PART A
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1
 SELECT DISTINCT
 	hx.*
 	,DATEDIFF(MONTH, hx.EarliestHistoricalEventDateTime, hx.DiagnosisEventDateTime)
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A AS hx
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A AS hx
 WHERE
 	hx.EarliestHistoricalEventDateTime = 
 	(
 		SELECT TOP 1 t.EarliestHistoricalEventDateTime
-		FROM Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A AS t
 		WHERE hx.PatientSSN = t.PatientSSN
 		ORDER BY t.EarliestHistoricalEventDateTime ASC
 	)
@@ -1290,12 +1290,12 @@ WHERE
 
 -- II.01.C ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1311,17 +1311,17 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2
 )
 
 -- For each patient, get the earliest historical event from eSTEP 01 PART A
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2
 SELECT DISTINCT
 	hx.*
 	,DATEDIFF(MONTH, hx.EarliestHistoricalEventDateTime, hx.DiagnosisEventDateTime)
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A AS hx
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A AS hx
 WHERE
 	hx.EarliestHistoricalEventDateTime = 
 	(
 		SELECT TOP 1 t.EarliestHistoricalEventDateTime
-		FROM Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A AS t
+		FROM Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A AS t
 		WHERE hx.PatientSSN = t.PatientSSN
 		ORDER BY t.EarliestHistoricalEventDateTime DESC
 	)
@@ -1334,16 +1334,16 @@ GO
 -- Set the emergency care (EC) search period 
 DECLARE @STEP02_CareHxThreshold INT
 
-SET @STEP02_CareHxThreshold = (SELECT params.CareHx_Length_Months FROM Dflt._ppkprd_LCa_2019n_ParameterTable AS params)
+SET @STEP02_CareHxThreshold = (SELECT params.CareHx_Length_Months FROM Dflt._ppkprd_CRC_2019n_ParameterTable AS params)
 
 PRINT CHAR(13) + CHAR(10) + 'eStep 02 - Minimum Care History Threshold: ' + CAST(@STEP02_CareHxThreshold AS VARCHAR)
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1360,7 +1360,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A
 
 /* Select records from the Inclusion steps that have an in-system medical history > the 
 threshold as deteremined by the date of their earliest PCP encounter. */
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A
 SELECT DISTINCT
 	prev.PatientSSN
 	,prev.PatientSID
@@ -1377,7 +1377,7 @@ SELECT DISTINCT
 		ELSE 0
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL AS prev INNER JOIN Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1 AS ehx ON
+	Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL AS prev INNER JOIN Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1 AS ehx ON
 	(
 		prev.PatientSSN = ehx.PatientSSN
 		AND
@@ -1387,12 +1387,12 @@ FROM
 
 -- II.02.B ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1410,7 +1410,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z
 
 /* Select records from the Inclusion steps that have a PCP encounter 
 that has occured within the threshold lookback period prior to their diagnosis date*/
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z
 SELECT DISTINCT
 	prev.PatientSSN
 	,prev.PatientSID
@@ -1428,7 +1428,7 @@ SELECT DISTINCT
 		ELSE 0
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A AS prev INNER JOIN Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2 AS ehx ON
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A AS prev INNER JOIN Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2 AS ehx ON
 	(
 		prev.PatientSSN = ehx.PatientSSN
 		AND
@@ -1442,12 +1442,12 @@ GO
 
 -- II.03 ----------------------------------------------------------------------------------------
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL
+CREATE TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL
 (
 	PatientSSN VARCHAR(10)
 	,PatientSID BIGINT
@@ -1464,7 +1464,7 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL
 )
 
 -- Save records after exclusion steps
-INSERT INTO Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL
+INSERT INTO Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL
 SELECT DISTINCT
 	exc.PatientSSN
 	,exc.PatientSID
@@ -1478,7 +1478,7 @@ SELECT DISTINCT
 	,exc.ECTypeOfEvent
 	,exc.HasPCPBeforeCutOff
 	,exc.HasPCPAfterCutOff
-FROM Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z AS exc
+FROM Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z AS exc
 WHERE exc.HasPCPAfterCutOff = 1
 
 GO
@@ -1492,15 +1492,15 @@ GO
 
 
 
--- SAVE TABLE (PLEASE REPLACE "Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE" WITH THE NAME YOU WANT)
+-- SAVE TABLE (PLEASE REPLACE "Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE" WITH THE NAME YOU WANT)
 -- ================================================================================================
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+		DROP TABLE Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 	END
 
-CREATE TABLE Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+CREATE TABLE Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 (
 	PatientSSN VARCHAR(100)
 	,DiagnosticEventDateTime DATE
@@ -1519,11 +1519,11 @@ CREATE TABLE Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
 	,PatientRace VARCHAR(100)
 )
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
-	,CONCAT('''', reg.CitytownAtDX, ', ', '''', reg.StateatdXX)
+	,CONCAT('''', d_sta.City, ', ', '''', d_stt.[State])
 	,prev.TypeOfCancer
 	,prev.StageOfCancer
 	,prev.DiagnosisTypeOfEvent
@@ -1542,7 +1542,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Oncology_Oncology_Primary_165_5 AS reg ON 
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Oncology_Oncology_Primary_165_5 AS reg ON 
 	(
 		prev.DiagnosisEventSID = reg.OncologyPrimaryIEN 
 		AND 
@@ -1566,17 +1566,25 @@ FROM
 					(
 						sp.PatientSID = prev.PatientSID
 					)
-						INNER JOIN Src.PatSub_PatientRace AS pr ON sp.PatientSID = pr.PatientSID INNER JOIN Src.PatSub_PatientEthnicity AS pe ON sp.PatientSID = pe.PatientSID
+						LEFT JOIN CDWWork.Dim.Sta3n AS d_sta ON
+						(
+							d_sta.Sta3n = reg.Sta3n
+						)
+							LEFT JOIN CDWWork.Dim.[State] AS d_stt ON
+							(
+								d_sta.StateSID = d_stt.StateSID
+							)
+								INNER JOIN Src.PatSub_PatientRace AS pr ON sp.PatientSID = pr.PatientSID INNER JOIN Src.PatSub_PatientEthnicity AS pe ON sp.PatientSID = pe.PatientSID
 WHERE
 	prev.DiagnosisTypeOfEvent = 'REGISTRY ENTRY'
 	AND
 	prev.ECTypeOfEvent = 'INPATIENT'
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
-	,CONCAT('''', reg.CitytownAtDX, ', ', '''', reg.StateatdXX)
+	,CONCAT('''', d_sta.City, ', ', '''', d_stt.[State])
 	,prev.TypeOfCancer
 	,prev.StageOfCancer
 	,prev.DiagnosisTypeOfEvent
@@ -1595,7 +1603,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Oncology_Oncology_Primary_165_5 AS reg ON 
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Oncology_Oncology_Primary_165_5 AS reg ON 
 	(
 		prev.DiagnosisEventSID = reg.OncologyPrimaryIEN 
 		AND 
@@ -1619,13 +1627,22 @@ FROM
 					(
 						sp.PatientSID = prev.PatientSID
 					)
-						INNER JOIN Src.PatSub_PatientRace AS pr ON sp.PatientSID = pr.PatientSID INNER JOIN Src.PatSub_PatientEthnicity AS pe ON sp.PatientSID = pe.PatientSID
+						LEFT JOIN CDWWork.Dim.Sta3n AS d_sta ON
+						(
+							d_sta.Sta3n = reg.Sta3n
+						)
+							LEFT JOIN CDWWork.Dim.[State] AS d_stt ON
+							(
+								d_sta.StateSID = d_stt.StateSID
+							)
+								INNER JOIN Src.PatSub_PatientRace AS pr ON sp.PatientSID = pr.PatientSID INNER JOIN Src.PatSub_PatientEthnicity AS pe ON sp.PatientSID = pe.PatientSID
 WHERE
 	prev.DiagnosisTypeOfEvent = 'REGISTRY ENTRY'
 	AND
 	prev.ECTypeOfEvent = 'ED-Treat-and-Release'
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+-- IS SAVING THE CANCER DIAGNOSES INFERRED THROUGH FIRST OCCURENCE OF A CANCER ICD CODE IN AN INPATIENT SETTING, BUT WE ARE NOT USING THESE FOR FINAL COUNT; COMPILER SCRIPT WILL FILTER OUT
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
@@ -1648,7 +1665,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Inpat_Inpatient AS d_inp ON
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Inpat_Inpatient AS d_inp ON
 		(
 			d_inp.InpatientSID = prev.DiagnosisEventSID
 		)
@@ -1682,7 +1699,8 @@ WHERE
 	AND
 	prev.ECTypeOfEvent = 'INPATIENT'
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+-- IS SAVING THE CANCER DIAGNOSES INFERRED THROUGH FIRST OCCURENCE OF A CANCER ICD CODE IN AN INPATIENT SETTING, BUT WE ARE NOT USING THESE FOR FINAL COUNT; COMPILER SCRIPT WILL FILTER OUT
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
@@ -1705,7 +1723,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Inpat_Inpatient AS d_inp ON
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Inpat_Inpatient AS d_inp ON
 		(
 			d_inp.InpatientSID = prev.DiagnosisEventSID
 		)
@@ -1739,7 +1757,8 @@ WHERE
 	AND
 	prev.ECTypeOfEvent = 'ED-Treat-and-Release'
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+-- IS SAVING THE CANCER DIAGNOSES INFERRED THROUGH FIRST OCCURENCE OF A CANCER ICD CODE IN AN OUTPATIENT SETTING, BUT WE ARE NOT USING THESE FOR FINAL COUNT; COMPILER SCRIPT WILL FILTER OUT
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
@@ -1762,7 +1781,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Outpat_Workload AS d_owl ON
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Outpat_Workload AS d_owl ON
 		(
 			d_owl.VisitSID = prev.DiagnosisEventSID
 		)
@@ -1796,7 +1815,8 @@ WHERE
 	AND
 	prev.ECTypeOfEvent = 'INPATIENT'
 
-INSERT INTO Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+-- IS SAVING THE CANCER DIAGNOSES INFERRED THROUGH FIRST OCCURENCE OF A CANCER ICD CODE IN AN OUTPATIENT SETTING, BUT WE ARE NOT USING THESE FOR FINAL COUNT; COMPILER SCRIPT WILL FILTER OUT
+INSERT INTO Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 SELECT DISTINCT
 	CONCAT('''', prev.PatientSSN, '''')
 	,CAST(prev.DiagnosisEventDateTime AS DATE)
@@ -1819,7 +1839,7 @@ SELECT DISTINCT
 		ELSE 'OTHER'
 	 END
 FROM
-	Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Outpat_Workload AS d_owl ON
+	Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL AS prev LEFT JOIN Src.Outpat_Workload AS d_owl ON
 		(
 			d_owl.VisitSID = prev.DiagnosisEventSID
 		)
@@ -1859,142 +1879,142 @@ WHERE
 -- ================================================================================================
 
 SELECT COUNT(DISTINCT PatientSSN)
-FROM Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+FROM Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 
 
 SELECT DISTINCT *
-FROM Dflt._ppkprd_LCa_2019n_OUTPUT_TABLE
+FROM Dflt._ppkprd_CRC_2019n_OUTPUT_TABLE
 
 
 
 -- DELETE TABLES ==================================================================================
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_ParameterTable') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_ParameterTable') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_ParameterTable
+		DROP TABLE Dflt._ppkprd_CRC_2019n_ParameterTable
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
+		DROP TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10CMCodes
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
+		DROP TABLE Dflt._ppkprd_CRC_2019n_SETUP_PlannedHospitalization_ICD10PCSCodes
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP01_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP01_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP02_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP02_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP03_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP03_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_B
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_B
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP04_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP04_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_B
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_B
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_C
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_C
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_D
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_D
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_E
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_E
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_F
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_F
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP05_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP05_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_STEP06_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_STEP06_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_INCLUSION_FINAL
+		DROP TABLE Dflt._ppkprd_CRC_2019n_INCLUSION_FINAL
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z1
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z1
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP01_Z2
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP01_Z2
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_A
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_A
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_STEP02_Z
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_STEP02_Z
 	END
 
-IF (OBJECT_ID('Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL') IS NOT NULL)
+IF (OBJECT_ID('Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL') IS NOT NULL)
 	BEGIN
-		DROP TABLE Dflt._ppkprd_LCa_2019n_EXCLUSION_FINAL
+		DROP TABLE Dflt._ppkprd_CRC_2019n_EXCLUSION_FINAL
 	END
