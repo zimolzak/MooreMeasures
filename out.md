@@ -1,4 +1,15 @@
-# Pseudocode for a digital quality measure about emergency presentation of cancer
+# Digital quality measures of cancer diagnosis
+
+1. Rate of delayed cancer red flag follow-up (process measure)
+2. Rate of cancers diagnosed as an emergency (outcome measure)
+3. Rate of cancers diagnosed at advanced stage (outcome measure)
+
+This repository currently focuses on measures 2 and 3 only. This
+README file contains pseudocode for measure 2 (emergency presentation
+of cancer).
+
+
+
 
 # Terminology
 
@@ -77,6 +88,9 @@
     healthcare encounters within a health system to qualify as having a
     history of receiving care from that health system.
 
+
+
+
 # Parameters
 
 1.  Set up Parameters
@@ -97,25 +111,28 @@
         diagnosis date for which the patient needs to have previous
         records of being in the health system)
 
+
+
+
 # Numerator
 
 ## Inclusion
 
-2.  Get a list of all cancer records in the Search Period for the Cancer
+1.  Get a list of all cancer records in the Search Period for the Cancer
     of Study. This includes (a) Cancer Registry Entries as well as (b)
     diagnostic code occurrences for the Study Cancer (*this part is
     optional -- the current code does this but later filters these
     occurrences out as we are not currently using them to determine
     cancer incidence*).
 
-3.  Using the same methodology as in Step 1, get a list of all cancer
+2.  Using the same methodology as in Step 1, get a list of all cancer
     records in the exclusion period prior to the search period for the
     cancer of study.
 
-4.  Remove all cancer records from Step 1 for patients that were also
+3.  Remove all cancer records from Step 1 for patients that were also
     identified in the cancer records in Step 2.
 
-5.  From Step 3, add Cancer Registry Entries to a table (select only the
+4.  From Step 3, add Cancer Registry Entries to a table (select only the
     earliest for any given type of cancer for any given patient). Then,
     for patients from Step 3 that do not have cancer registry entries,
     add the First-Time Diagnostic Code occurrences to that table by
@@ -123,11 +140,11 @@
     This table now contains the collection of Diagnosis Events within
     the study parameters.
 
-6.  Select for all potential emergency care events in the Potential
+5.  Select for all potential emergency care events in the Potential
     Lookback Search Period. This table now contains the collection of
     Emergency Care Events within the study parameters.
 
-7.  Select for dyads of Diagnosis Events and Emergency Care Events for
+6.  Select for dyads of Diagnosis Events and Emergency Care Events for
     each patient such that the Emergency Care Event falls within the
     lookback period for the Diagnosis Event.
 
@@ -136,6 +153,9 @@
 1.  From Step 6, select only records for patients who've had previous
     records in the health system for at least the Prior History Period
     (to ensure that the patients are "enrolled" in the health system).
+
+
+
 
 # Denominator
 
@@ -168,6 +188,9 @@
 1.  From Step 4, select only records for patients who've had previous
     records in the health system for at least the Prior History Period
     (to ensure that the patients are "enrolled" in the health system).
+
+
+
 
 # Output
 
