@@ -1,4 +1,4 @@
-files = out.pdf out.docx
+files = README.pdf README.docx
 
 .PHONY: all clean
 
