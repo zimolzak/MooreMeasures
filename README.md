@@ -51,32 +51,31 @@ fields:
 - Search Period Start: The date from which to search for Emergency
 Cancer Diagnoses.
 
-- Search Period Length: Length of time from
-$\text{Search\ Period\ Start}$ over which the search will be
-conducted.
+- Search Period Length: Length of time from `Search Period Start` over
+which the search will be conducted.
 
-- Search Period: The range of dates encompassed by $Search\ Period\
-Start + Search\ Period\ Length$ over which the search is conducted.
+- Search Period: The range of dates encompassed by `Search Period
+Start + Search Period Length` over which the search is conducted.
 
 - Exclusion Period Length: Length of time prior to
-$\text{Search\ Period\ Start}$ over which diagnostic data will be
+`Search Period Start` over which diagnostic data will be
 collected for each patient to exclude them from the study if they have
 a prior cancer diagnosis.
 
-- Exclusion Period: The range of dates encompassed by $Search\ Period\
-Start - Exclusion\ Period\ Length$ over which data for exclusion is
+- Exclusion Period: The range of dates encompassed by `Search Period
+Start - Exclusion Period Length` over which data for exclusion is
 collected.
 
 - Lookback Period Length: The period of time prior to each Diagnosis
 Event over which a Pre-Diagnosis Emergency Care Event may occur.
 
-- Lookback Period: The range of dates encompassed by $Diagnosis\
-Event\ Start\ Date - Lookback\ Period\ Length$ over which a
+- Lookback Period: The range of dates encompassed by `Diagnosis
+Event Start Date - Lookback Period Length` over which a
 Pre-Diagnosis Emergency Care Event may occur for each Diagnosis Event.
 
 - Potential Lookback Search Period: The range of dates encompassed by
-$Search\ Period\ Start - Lookback\ Period\ Length$ to $Search\ Period\
-Start + Search\ Period\ Length$.
+`Search Period Start - Lookback Period Length` to `Search Period
+Start + Search Period Length`.
 
 - Search Region: The geographic region within a health system over
 which a search is conducted.
