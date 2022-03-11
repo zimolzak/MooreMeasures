@@ -57,10 +57,9 @@ which the search will be conducted.
 - Search Period: The range of dates encompassed by `Search Period
 Start + Search Period Length` over which the search is conducted.
 
-- Exclusion Period Length: Length of time prior to
-`Search Period Start` over which diagnostic data will be
-collected for each patient to exclude them from the study if they have
-a prior cancer diagnosis.
+- Exclusion Period Length: Length of time prior to `Search Period
+Start` over which diagnostic data will be collected for each patient
+to exclude them from the study if they have a prior cancer diagnosis.
 
 - Exclusion Period: The range of dates encompassed by `Search Period
 Start - Exclusion Period Length` over which data for exclusion is
@@ -69,13 +68,13 @@ collected.
 - Lookback Period Length: The period of time prior to each Diagnosis
 Event over which a Pre-Diagnosis Emergency Care Event may occur.
 
-- Lookback Period: The range of dates encompassed by `Diagnosis
-Event Start Date - Lookback Period Length` over which a
-Pre-Diagnosis Emergency Care Event may occur for each Diagnosis Event.
+- Lookback Period: The range of dates encompassed by `Diagnosis Event
+Start Date - Lookback Period Length` over which a Pre-Diagnosis
+Emergency Care Event may occur for each Diagnosis Event.
 
 - Potential Lookback Search Period: The range of dates encompassed by
-`Search Period Start - Lookback Period Length` to `Search Period
-Start + Search Period Length`.
+`Search Period Start - Lookback Period Length` to `Search Period Start
++ Search Period Length`.
 
 - Search Region: The geographic region within a health system over
 which a search is conducted.
@@ -115,12 +114,12 @@ history of receiving care from that health system.
 
 ## Inclusion
 
-1. Get a list of all cancer records in the Search Period for the Cancer
-of Study. This includes (a) Cancer Registry Entries as well as (b)
-diagnostic code occurrences for the Study Cancer (*this part is
+1. Get a list of all cancer records in the Search Period for the
+Cancer of Study. This includes (a) Cancer Registry Entries as well as
+(b) diagnostic code occurrences for the Study Cancer (*this part is
 optional -- the current code does this but later filters these
-occurrences out as we are not currently using them to determine
-cancer incidence*).
+occurrences out as we are not currently using them to determine cancer
+incidence*).
 
 2. Using the same methodology as in Step 1, get a list of all cancer
 records in the exclusion period prior to the search period for the
@@ -129,12 +128,12 @@ cancer of study.
 3. Remove all cancer records from Step 1 for patients that were also
 identified in the cancer records in Step 2.
 
-4. From Step 3, add Cancer Registry Entries to a table (select only the
-earliest for any given type of cancer for any given patient). Then,
-for patients from Step 3 that do not have cancer registry entries,
-add the First-Time Diagnostic Code occurrences to that table by
-selecting only the earliest diagnostic code occurrences from Step 3.
-This table now contains the collection of Diagnosis Events within
+4. From Step 3, add Cancer Registry Entries to a table (select only
+the earliest for any given type of cancer for any given patient).
+Then, for patients from Step 3 that do not have cancer registry
+entries, add the First-Time Diagnostic Code occurrences to that table
+by selecting only the earliest diagnostic code occurrences from Step
+3. This table now contains the collection of Diagnosis Events within
 the study parameters.
 
 5. Select for all potential emergency care events in the Potential
@@ -158,12 +157,12 @@ records in the health system for at least the Prior History Period
 
 ## Inclusion
 
-1. Get a list of all cancer records in the Search Period for the Cancer
-of Study. This includes (a) Cancer Registry Entries as well as (b)
-diagnostic code occurrences for the Study Cancer (*this part is
+1. Get a list of all cancer records in the Search Period for the
+Cancer of Study. This includes (a) Cancer Registry Entries as well as
+(b) diagnostic code occurrences for the Study Cancer (*this part is
 optional -- the current code does this but later filters these
-occurrences out as we are not currently using them to determine
-cancer incidence*).
+occurrences out as we are not currently using them to determine cancer
+incidence*).
 
 2. Using the same methodology as in Step 1, get a list of all cancer
 records in the exclusion period prior to the search period for the
@@ -172,19 +171,19 @@ cancer of study.
 3. Remove all cancer records from Step 1 for patients that were also
 identified in the cancer records in Step 2.
 
-4. From Step 3, add Cancer Registry Entries to a table (select only the
-earliest for any given type of cancer for any given patient). Then,
-for patients from Step 3 that do not have cancer registry entries,
-add the First-Time Diagnostic Code occurrences to that table by
-selecting only the earliest diagnostic code occurrences from Step 3.
-This table now contains the collection of Diagnosis Events within
+4. From Step 3, add Cancer Registry Entries to a table (select only
+the earliest for any given type of cancer for any given patient).
+Then, for patients from Step 3 that do not have cancer registry
+entries, add the First-Time Diagnostic Code occurrences to that table
+by selecting only the earliest diagnostic code occurrences from Step
+3. This table now contains the collection of Diagnosis Events within
 the study parameters.
 
 ## Exclusion
 
 1. From Step 4, select only records for patients who've had previous
-records in the health system for at least the Prior History Period
-(to ensure that the patients are "enrolled" in the health system).
+records in the health system for at least the Prior History Period (to
+ensure that the patients are "enrolled" in the health system).
 
 
 
