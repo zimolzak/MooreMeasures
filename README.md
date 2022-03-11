@@ -115,8 +115,8 @@ history of receiving care from that health system.
 ## Inclusion
 
 1. Get a list of all cancer records in the Search Period for the
-Cancer of Study. This includes (a) Cancer Registry Entries as well as
-(b) diagnostic code occurrences for the Study Cancer (*this part is
+Cancer of Study. This includes (a) Cancer Registry Entries as well
+as (b) diagnostic code occurrences for the Study Cancer (*this part is
 optional -- the current code does this but later filters these
 occurrences out as we are not currently using them to determine cancer
 incidence*).
@@ -158,8 +158,8 @@ records in the health system for at least the Prior History Period
 ## Inclusion
 
 1. Get a list of all cancer records in the Search Period for the
-Cancer of Study. This includes (a) Cancer Registry Entries as well as
-(b) diagnostic code occurrences for the Study Cancer (*this part is
+Cancer of Study. This includes (a) Cancer Registry Entries as well
+as (b) diagnostic code occurrences for the Study Cancer (*this part is
 optional -- the current code does this but later filters these
 occurrences out as we are not currently using them to determine cancer
 incidence*).
