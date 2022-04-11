@@ -5,8 +5,8 @@ digraph{
 cancer_dx[shape=rectangle, label="Cancer Diagnosis\n\n(n=10,000)"]
 no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=9,000)"]
 emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=1,000)"]
-signals_related[shape=rectangle, label="Clinical signals\nunrelated to cancer\n\n(n=100)"]
-signals_unrelated[shape=rectangle, label="Clinical signals\nrelated to cancer\n\n(n=900)"]
+signals_related[shape=rectangle, label="Clinical signals\nrelated to cancer\n\n(n=900)"]
+signals_unrelated[shape=rectangle, label="Clinical signals\nunrelated to cancer\n\n(n=100)"]
 
 Flagged[shape=rectangle, label="EP-Flagged\nRecords"]
 review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
