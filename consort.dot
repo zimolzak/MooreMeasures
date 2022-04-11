@@ -18,7 +18,7 @@ dx_related_type3_incidental[shape=rectangle, label="Diagnosis in related\nsubseq
 dx_unrelated_nonEP_FP[shape=rectangle, label="Diagnosis in unrelated\nsubsequent encounter\n\n(n=10)", style=filled, color=grey]
 
 MOD_review[shape=rectangle, label="Structured record review of\nprior missed opportunities\n\n(n=90)"]
-yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=50)", style=filled, color=lightslateblue]
+yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=50)", style=filled, color=lightblue]
 no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=40)", style=filled, color=lightpink]
 
 # Edges
