@@ -1,5 +1,26 @@
 digraph{
 
+# Nodes
+
+Flagged[shape=rectangle]
+MOD_review[shape=rectangle]
+cancer_dx[shape=rectangle]
+chief_concern[shape=rectangle]
+dx_during_type1[shape=rectangle]
+dx_later_type2[shape=rectangle]
+dx_related_type3_incidental[shape=rectangle]
+dx_unrelated_nonEP_FP[shape=rectangle]
+emerg[shape=rectangle]
+no_MOD[shape=rectangle]
+no_emerg[shape=rectangle]
+not_chief[shape=rectangle]
+review_sample[shape=rectangle]
+signals_related[shape=rectangle]
+signals_unrelated[shape=rectangle]
+yes_MOD[shape=rectangle]
+
+# Edges
+
 cancer_dx -> no_emerg
 cancer_dx -> emerg
 emerg -> signals_unrelated
