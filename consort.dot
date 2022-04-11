@@ -1,0 +1,24 @@
+digraph{
+
+cancer_dx -> no_emerg
+cancer_dx -> emerg
+emerg -> signals_unrelated
+emerg -> signals_related
+signals_related -> Flagged
+
+Flagged -> review_sample
+review_sample -> chief_concern
+review_sample -> not_chief
+chief_concern -> dx_during_type1
+chief_concern -> dx_later_type2
+not_chief -> dx_related_type3_incidental
+not_chief -> dx_unrelated_nonEP_FP
+
+dx_during_type1 -> MOD_review
+dx_later_type2 -> MOD_review
+dx_related_type3_incidental -> MOD_review
+
+MOD_review -> yes_MOD
+MOD_review -> no_MOD
+
+}
