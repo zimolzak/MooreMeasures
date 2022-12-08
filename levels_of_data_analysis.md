@@ -1,0 +1,29 @@
+
+- dQM algorithm: flags records of potential EPs
+	- characteristics
+		- incidence
+		- age
+		- sex
+		- race/ethnicity
+		- *geography?*
+		- *SES?*
+	- antecedents
+		- *PCP visits?*
+		- *specialty visits?*
+		- *referrals?*
+		- *lab test orders?*
+		- *imaging orders?*
+	- sequelae
+		- mortality
+		- *treamtent?*
+- randomly sampled chart review of **flagged** EPs
+	- percent of true positive EPs vs false positive flagged records
+	- type of emergency event
+	- cancer signal + clinical response
+	- type of EP
+- deeper chart review of **true** EPs
+	- presence of screening / up to date on screening?
+	- presence of red flags
+	- timeline: earliest red flag / positive screening → launch of diagnostic evaluation → completion of diagnostic evaluation → EP
+	- Type I vs Type II MOD
+	- MOD Dimensions
