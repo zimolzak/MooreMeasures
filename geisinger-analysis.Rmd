@@ -5,26 +5,112 @@ date: "2023-02-26"
 output: word_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r packages}
+library(dplyr)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r input}
+X0 = read.csv("EP-DU-1-26-22.csv")
+dim(X0)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+colnames(X0)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r my-colnames}
+my_colnames <- c(
+  "id",
+"age",
+"gender",
+"race",
+"ethn",
+"date1",
+"ca.type",
+"stage",
+"date2",
+"true.ed",
+"true.ed.other",
+"true.dx",
+"true.dx.other",
+"setting",
+"setting.other",
+"sig.ida",
+"sig.obstr",
+"sig.blood",
+"sig.abdmass",
+"sig.rectmass",
+"sig.caliber",
+"sig.scope",
+"sig.fobt",
+"sig.flex",
+"sig.barium",
+"sig.ct",
+"sig.fhx",
+"sig.massexam",
+"sig.other",
+"sig.othertext",
+"signalwascc",
+"signalwascc.other",
+"followup",
+"followup.other",
+"typeep",
+"typeep.other",
+"cscope.prior",
+"cscope.prior.date",
+"cscope.prior.results",
+"cscope.declined",
+"redflags",
+"redflags.mult",
+"redflags.earliest",
+"redflags.other",
+"redflags.date",
+"dx.init",
+"dx.complete",
+"cancer.dx.considered",
+"outside.care",
+"mod",
+"delay.requesting",
+"delay.completing",
+"pt.delay",
+"pt.adhere",
+"pt.other",
+"pt.othertext",
+"ppe.hx",
+"ppe.exam",
+"ppe.ordering",
+"ppe.documentation",
+"ppe.integration",
+"ppe.other",
+"ppe.othertext",
+"tests.notdone",
+"tests.donewrong",
+"tests.interpwrong",
+"tests.misident",
+"tests.other",
+"tests.othertext",
+"follow.timely",
+"follow.scheduling",
+"follow.returnresults",
+"follow.reviewresults",
+"follow.documenting",
+"follow.monitorpt",
+"follow.other",
+"follow.othertext",
+"refer.init",
+"refer.action",
+"refer.communication",
+"refer.other",
+"refer.othertext",
+"summary",
+"complete"
+)
+
+length(my_colnames)
+```
+```{r assign-colnames}
+colnames(X0) <- my_colnames
+```
+
