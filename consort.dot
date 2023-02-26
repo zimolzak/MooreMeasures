@@ -1,36 +1,21 @@
 digraph{
 
-# Nodes
-
 cancer_dx[shape=rectangle, label="New colorectal cancer diagnoses\nat VA\n\n(n=14,674)"]
-
 emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=3,401)"]
-
 no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=11,273)"]
-
-review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
-
-ppv[shape=rectangle, label="ppv\n\n(n=80)"]
-
-fp[shape=rectangle, label="false positive\n\n(n=20)"]
-
-yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=FIXME)"]
-
-no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=FIXME)"]
-
-
-
-
-# Edges
-
 cancer_dx -> emerg
 cancer_dx -> no_emerg
+
+review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
 emerg -> review_sample
 
+ppv[shape=rectangle, label="ppv\n\n(n=73)"]
+fp[shape=rectangle, label="false positive\n\n(n=27)"]
 review_sample -> ppv
 review_sample -> fp
 
+yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=FIXME 69.9%)"]
+no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=FIXME)"]
 ppv -> yes_MOD
 ppv -> no_MOD
-
 }
