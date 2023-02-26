@@ -18,6 +18,12 @@ X0 = read.csv("EP-DU-1-26-22.csv")
 dim(X0)
 ```
 
+```{r input-lung}
+L0 = read.csv("final lung EP for Houston de-id 3-28-22.csv")
+dim(L0)
+```
+
+
 ## Inspect and edit colnames
 
 ```{r include=FALSE}
@@ -120,7 +126,9 @@ length(my_colnames)
 colnames(X0) <- my_colnames
 ```
 
-# Results
+# CRC Results
+
+## Overly complex crosstables
 
 ```{r tabulate-ppv}
 table(was.ed.encounter = X0$true.ed, new.ca.dx.30d = X0$true.dx)
@@ -146,7 +154,6 @@ X0 %>%
 ## Useful tables
 
 ```{r table-of-type}
-
 addmargins(table(X1$typeep))
 ```
 
@@ -154,7 +161,6 @@ addmargins(table(X1$typeep))
 addmargins(table(X1$mod))
 ```
 
+# Lung results
 
-# Reminder
-
-This is only colorectal data. *Where are the lung data?*
+TBD.
