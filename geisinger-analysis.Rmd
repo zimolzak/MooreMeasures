@@ -7,6 +7,7 @@ output: word_document
 
 ```{r packages}
 library(dplyr)
+library(knitr)
 ```
 
 
@@ -112,5 +113,15 @@ length(my_colnames)
 ```
 ```{r assign-colnames}
 colnames(X0) <- my_colnames
+```
+
+# Results
+
+```{r tabulate-ppv}
+table(was.ed.encounter = X0$true.ed, new.ca.dx.30d = X0$true.dx)
+```
+
+```{r tabulate-mod}
+table(mod.status = X0$mod, had.redflag.prior = X0$redflags)
 ```
 
