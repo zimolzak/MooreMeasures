@@ -5,7 +5,9 @@ date: "2023-02-26"
 output: word_document
 ---
 
-```{r packages}
+# Setup
+
+```{r packages, message=FALSE, warning=FALSE}
 library(dplyr)
 library(knitr)
 ```
@@ -16,12 +18,14 @@ X0 = read.csv("EP-DU-1-26-22.csv")
 dim(X0)
 ```
 
-```{r}
+## Inspect and edit colnames
+
+```{r include=FALSE}
 colnames(X0)
 ```
 
 
-```{r my-colnames}
+```{r my-colnames, include=FALSE}
 my_colnames <- c(
   "id",
 "age",
@@ -109,9 +113,10 @@ my_colnames <- c(
 "complete"
 )
 
-length(my_colnames)
 ```
+
 ```{r assign-colnames}
+length(my_colnames)
 colnames(X0) <- my_colnames
 ```
 
@@ -125,3 +130,31 @@ table(was.ed.encounter = X0$true.ed, new.ca.dx.30d = X0$true.dx)
 table(mod.status = X0$mod, had.redflag.prior = X0$redflags)
 ```
 
+## Tidy some cell values
+
+```{r casewhen}
+X0 %>%
+  mutate(typeep = case_when(
+    typeep == "Cancer diagnosed during the emergency visit or inpatient stay (including direct admits from PCP or ED)" ~ "Route A during",
+    typeep == "Cancer diagnosed in a related, <b>separate</b> encounter following a cancer-related-emergency event" ~ "Route B after cancer visit",
+    typeep == "Cancer diagnosed in a related, separate encounter following a <b>non-cancer</b>-related-emergency event" ~ "Route C after noncancer visit",
+    typeep == "Cancer diagnosed in an <b>unrelated</b>, separate encounter following a non-cancer-related-emergency event" ~ "Route D unrelated",
+    TRUE ~ typeep
+  )) -> X1
+```
+
+## Useful tables
+
+```{r table-of-type}
+
+addmargins(table(X1$typeep))
+```
+
+```{r just-mod}
+addmargins(table(X1$mod))
+```
+
+
+# Reminder
+
+This is only colorectal data. *Where are the lung data?*
