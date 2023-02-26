@@ -5,8 +5,6 @@ digraph{
 cancer_dx[shape=rectangle, label="Cancer Diagnosis\n\n(n=10,000)"]
 emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=1,000)"]
 no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=9,000)", style=filled, color=grey]
-signals_related[shape=rectangle, label="Clinical signals\nrelated to cancer\n(EP-flagged records)\n\n(n=900)", style=filled, color=lightgreen]
-signals_unrelated[shape=rectangle, label="Clinical signals\nunrelated to cancer\n\n(n=100)", style=filled, color=grey]
 
 review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
 chief_concern[shape=rectangle, label="Cancer signals\nrepresent chief concern\n\n(n=80)"]
@@ -21,14 +19,15 @@ MOD_review[shape=rectangle, label="Structured record review of\nprior missed opp
 yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=50)", style=filled, color=lightblue]
 no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=40)", style=filled, color=lightpink]
 
+
+
+
 # Edges
 
 cancer_dx -> emerg
 cancer_dx -> no_emerg
-emerg -> signals_unrelated
-emerg -> signals_related
 
-signals_related -> review_sample
+emerg -> review_sample
 review_sample -> chief_concern
 review_sample -> not_chief
 chief_concern -> dx_during_type1
