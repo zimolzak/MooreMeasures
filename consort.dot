@@ -2,27 +2,27 @@ digraph{
 
 # Nodes
 
-cancer_dx[shape=rectangle, label="Cancer Diagnosis\n\n(n=10,000)"]
+cancer_dx[shape=rectangle, label="New lung cancer diagnoses\nat VA\n\n(n=37,691)"]
 
-emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=1,000)"]
+emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=8,038)"]
 
-no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=9,000)"]
+no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=29,653)"]
 
 review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
 
-dx_during_type1[shape=rectangle, label="Diagnosis during\nemergency encounter\n\n(n=10)"]
+dx_during_type1[shape=rectangle, label="Diagnosis during\nemergency encounter\n\n(n=FIXME)"]
 
-dx_later_type2[shape=rectangle, label="Diagnosis in\nsubsequent encounter\n\n(n=70)"]
+dx_later_type2[shape=rectangle, label="Diagnosis in\nsubsequent encounter\n\n(n=FIXME)"]
 
-dx_related_type3_incidental[shape=rectangle, label="Diagnosis in related\nsubsequent encounter\n\n(n=10)"]
+dx_related_type3_incidental[shape=rectangle, label="Diagnosis in related\nsubsequent encounter\n\n(n=FIXME)"]
 
-dx_unrelated_nonEP_FP[shape=rectangle, label="Diagnosis in unrelated\nsubsequent encounter\n\n(n=10)"]
+dx_unrelated_nonEP_FP[shape=rectangle, label="Diagnosis in unrelated\nsubsequent encounter\n\n(n=20)"]
 
-MOD_review[shape=rectangle, label="Structured record review of\nprior missed opportunities\n\n(n=90)"]
+MOD_review[shape=rectangle, label="Structured record review of\nprior missed opportunities\n\n(n=80)"]
 
-yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=50)"]
+yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=FIXME)"]
 
-no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=40)"]
+no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=FIXME)"]
 
 
 
