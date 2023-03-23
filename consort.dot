@@ -1,21 +1,25 @@
 digraph{
 
-cancer_dx[shape=rectangle, label="New colorectal cancer diagnoses\nat VA\n\n(n=14,674)"]
-emerg[shape=rectangle, label="Emergency care\nprior to diagnosis\n\n(n=3,401)"]
-no_emerg[shape=rectangle, label="No emergency care\nprior to diagnosis\n\n(n=11,273)"]
+cancer_dx[shape=rectangle, label="New colorectal cancer\ndiagnoses at VA\n\n(n=14,674)"]
+emerg[shape=rectangle, label="Flagged EPs\n(Emergency care in 30\ndays prior to diagnosis)\n\n(n=3,291)"]
+no_emerg[shape=rectangle, label="Not flagged\n\n(n=11,383)"]
+
 cancer_dx -> emerg
 cancer_dx -> no_emerg
 
-review_sample[shape=rectangle, label="Structured record\nreview for validation\n\n(n=100)"]
+review_sample[shape=rectangle, label="Random sample,\nstructured record\nreview for validation\n\n(n=100)"]
+
 emerg -> review_sample
 
-ppv[shape=rectangle, label="ppv\n\n(n=73)"]
-fp[shape=rectangle, label="false positive\n\n(n=27)"]
+ppv[shape=rectangle, label="True positive EPs\n\n(n=72)"]
+fp[shape=rectangle, label="False positive\n\n(n=28)"]
+
 review_sample -> ppv
 review_sample -> fp
 
-yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=FIXME 69.9%)"]
-no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=FIXME)"]
+yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=51)"]
+no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=21)"]
+
 ppv -> yes_MOD
 ppv -> no_MOD
 }
