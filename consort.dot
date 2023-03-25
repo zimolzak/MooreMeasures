@@ -1,37 +1,33 @@
 digraph{
 
-cancer_dx[shape=rectangle, label="New colorectal cancer\ndiagnoses at VA\n\n(n=14,674)"]
-emerg[shape=rectangle, label="Flagged EPs\n(Emergency care in 30\ndays prior to diagnosis)\n\n(n=3,291)"]
-no_emerg[shape=rectangle, label="Not flagged\n\n(n=11,383)"]
+cancer_dx[shape=rectangle, label="New colorectal cancer\ndiagnoses at VA\n(n=14,674)"]
+emerg[shape=rectangle, label="Flagged EPs\n(Emergency care in 30\ndays prior to diagnosis)\n(n=3,291)"]
+no_emerg[shape=rectangle, label="Not flagged\n(n=11,383)"]
 
 cancer_dx -> emerg
 cancer_dx -> no_emerg
 
-review_sample[shape=rectangle, label="Random sample,\nstructured record\nreview for validation\n\n(n=100)"]
+review_sample[shape=rectangle, label="Random sample,\nstructured record\nreview for validation\n(n=100)"]
 
-ep_present[shape=diamond, label="EP\npresent?"]
+emerg -> review_sample
 
-emerg -> review_sample -> ep_present
+ppv[shape=rectangle, label="True positive EPs\n(n=72)"]
+fp[shape=rectangle, label="False positive\n(n=28)"]
 
-ppv[shape=rectangle, label="True positive EPs\n\n(n=72)"]
-fp[shape=rectangle, label="False positive\n\n(n=28)"]
+review_sample -> ppv
+review_sample -> fp
 
-ep_present -> ppv
-ep_present -> fp
+determine_route[shape=rectangle, style=rounded, label="Review record for:\l- route A/B/C of EP\l- prior cancer signals\n- prior screening\l- presence of MOD\l"]
 
-determine_route[shape=rectangle, style=rounded, label="Review record for:\n- route A/B/C of EP\l- prior cancer signals\n- prior screening\l"]
+ppv -> determine_route
 
-mod_present_yn[shape=diamond, label="MOD\npresent?"]
+yes_MOD[shape=rectangle, label="Evidence\nof MOD\n(n=51)"]
+no_MOD[shape=rectangle, label="No evidence\nof MOD\n(n=21)"]
 
-ppv -> determine_route -> mod_present_yn
+determine_route -> yes_MOD
+determine_route -> no_MOD
 
-yes_MOD[shape=rectangle, label="Evidence\nof MOD\n\n(n=51)"]
-no_MOD[shape=rectangle, label="No evidence\nof MOD\n\n(n=21)"]
-
-mod_present_yn -> yes_MOD
-mod_present_yn -> no_MOD
-
-determine_type[shape=rectangle, style=rounded, label="Determine:\n- type I/II of MOD\l- contributing factors\l"]
+determine_type[shape=rectangle, style=rounded, label="Determine:\l- type I/II of MOD\l- contributing factors\l"]
 
 yes_MOD -> determine_type
 
