@@ -7,3 +7,5 @@
 *.bundle
 consort.png
 .Rproj.user
+.RData
+.Rhistory
