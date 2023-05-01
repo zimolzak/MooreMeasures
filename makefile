@@ -3,7 +3,7 @@ files = consort.pdf consort.png
 .PHONY: all clean
 
 all: $(files)
-	$(MAKE) -C pseudocode
+	$(MAKE) -C outputs
 
 consort.pdf: consort.dot
 	dot -Tpdf -o $@ $<
@@ -13,4 +13,4 @@ consort.pdf: consort.dot
 
 clean:
 	rm -rf $(files)
-	$(MAKE) -C pseudocode clean
+	$(MAKE) -C outputs clean
