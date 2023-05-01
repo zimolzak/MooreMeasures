@@ -1,16 +1,6 @@
 % Cancer Test Result e-Trigger Manual
-
-**Guidance complied by:** Sahar Memon, Andrew Zimolzak, Li Wei, Daniel
-Murphy, Hardeep Singh.
-
-**Affiliation:** Michael E. DeBakey Veterans Affairs Medical Center,
-  and Baylor College of Medicine. Houston, TX, USA.
-
-**For questions:** [zimolzak@bcm.edu](mailto:zimolzak@bcm.edu) and [Sahar.Memon@bcm.edu](mailto:Sahar.Memon@bcm.edu)
-
-**Date:** October, 2021
-
-
+% Andrew Zimolzak, MD, MMSc
+% 2023-05-01
 
 
 # Overview
@@ -45,10 +35,6 @@ This code is public domain for *anyone* to use as they wish. However,
 if you have a published paper based in part on the code, we ask
 that you cite:
 
-- [Development and Validation of Trigger Algorithms to Identify Delays in Diagnostic Evaluation of Gastroenterological Cancer.](https://pubmed.ncbi.nlm.nih.gov/28804030/) *Clin Gastroenterol Hepatol.* 2018 Jan;16(1):90-98.
-- [Computerized Triggers of Big Data to Detect Delays in Follow-up of Chest Imaging Results.](https://pubmed.ncbi.nlm.nih.gov/27178786/) *Chest.* 2016 Sep;150(3):613-20.
-- [Development and Validation of Electronic Health Record-based Triggers to Detect Delays in Follow-up of Abnormal Lung Imaging Findings.](https://pubmed.ncbi.nlm.nih.gov/25961634/) *Radiology.* 2015 Oct;277(1):81-7.
-- [Electronic health record-based triggers to detect potential delays in cancer diagnosis.](https://pubmed.ncbi.nlm.nih.gov/23873756/) *BMJ Qual Saf.* 2014 Jan;23(1):8-16.
 
 
 
@@ -74,7 +60,6 @@ the e-triggers in local SQL.
 ## Downloading the SQL code
 
 1. The most recent version of the code can be downloaded from
-    [github.com/zimolzak/instruct-project-etrigger-sql](https://github.com/zimolzak/instruct-project-etrigger-sql)
     where you can also find additional procedures for setting dates,
     and guidance about which tables to export for final reporting.
 
@@ -174,12 +159,6 @@ continues to capture usage of both the historical and new codes).
 
 
 
-
-# Further reading (relevant files/attachments)
-
-- Reducing Missed Test Results Change Package
-- `Lung.sql` code file (see GitHub)
-- `Fobt.sql` code file (see GitHub)
 
 
 ---
