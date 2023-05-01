@@ -1,51 +1,45 @@
-% Cancer Test Result e-Trigger Manual
+% Digital Quality Measures of Cancer Diagnosis
 % Andrew Zimolzak, MD, MMSc
 % 2023-05-01
 
-
 # Overview
 
-This manual outlines procedures for implementing e-triggers that
-identify missed opportunities in follow-up of 'red flag' findings
-suspicious for colorectal or lung cancer. In general, each SQL file
-proceeds by:
+This manual outlines procedures for implementing a digital quality measure (dQM) to assess cancer diagnostic quality. There are two main measures.
+
+1. Rate of cancers diagnosed as an emergency (outcome measure)
+2. Rate of cancers diagnosed at advanced stage (outcome measure)
+
+We focus mainly on lung and colorectal cancer, but the measures can be adapted to other cancers. The code has support for some other cancers (*e.g.,* prostate).
+
+
+
+
+# details FIXME
+
+Include or not?? Also talks about missed test, not dqm.
+
+In general, the code proceeds by:
 
 1. defining the red flags that warrant additional evaluation for
-    cancer (often labs or imaging),
+cancer (often labs or imaging),
 
 2. excluding other explanations for the red flags, such as already
-    diagnosed colon cancer, or known cause of bleeding in the upper GI
-    tract (often based on ICD/CPT codes),
+diagnosed colon cancer, or known cause of bleeding in the upper GI
+tract (often based on ICD/CPT codes),
 
 3. excluding patients for whom follow-up is not deemed necessary, and
 
 4. excluding patients for whom appropriate follow-up was already done
-    (e.g., lung biopsy, follow-up imaging, tumor board, usually based
-    on stop codes and procedure codes).
+(e.g., lung biopsy, follow-up imaging, tumor board, usually based on
+stop codes and procedure codes).
 
 As an example, the e-trigger for colorectal cancer identifies patients
 with positive fecal blood tests or iron deficiency anemia, and then
-excludes patients with any of the following: advanced age, deceased
-status, known colon cancer, prior colectomy, terminal illnesses or
-hospice care, presence of a known diagnosis that would cause bleeding
-in the upper GI tract rather than lower GI tract, and appropriate
-colonoscopy or GI referral.
+excludes patients with any of the following: advanced age, dece
 
-This code is public domain for *anyone* to use as they wish. However,
-if you have a published paper based in part on the code, we ask
-that you cite:
-
-
-
-
-
-# How are the e-triggers designed?
-
-The lung and colorectal e-triggers are examples of one type of
-e-trigger, which we call a *close the loop e-trigger.* These two
-e-triggers answer the question, "How do you find (in the database)
-patients who had a test that shows a possibility of cancer, but who
-have **not** had timely follow-up?"
+These two e-triggers answer the question, "How do you find (in the
+database) patients who had a test that shows a possibility of cancer,
+but who have **not** had timely follow-up?"
 
 Further details about exactly what constitutes exclusion or follow-up
 can be found in the e-trigger manual appendices. Non-VA sites should
@@ -55,109 +49,211 @@ the e-triggers in local SQL.
 
 
 
-# How to Apply e-Trigger Process at a VA Facility
+# Denominator
 
-## Downloading the SQL code
+1. Get a list of all cancer records in the Search Period for the
+Cancer of Study. This includes (a) Cancer Registry Entries as well
+as (b) diagnostic code occurrences for the Study Cancer (*this part is
+optional -- the current code does this but later filters these
+occurrences out as we are not currently using them to determine cancer
+incidence*).
 
-1. The most recent version of the code can be downloaded from
-    where you can also find additional procedures for setting dates,
-    and guidance about which tables to export for final reporting.
+2. Using the same methodology as in Step 1, get a list of all cancer
+records in the exclusion period prior to the search period for the
+cancer of study.
 
-2. Before downloading, jot down or copy/paste the text in the bar near
-    the top of GitHub, especially the **seven random-looking letters
-    and numbers** such as "LWeiBCM Update Lung.sql ... **8c2f54a** 2
-    days ago." This will identify the exact version of the code you
-    downloaded, for future reference.
+3. Remove all cancer records from Step 1 for patients that were also
+identified in the cancer records in Step 2.
 
-3. Click on the SQL file you want above (such as `Lung.sql`).
-
-4. Click on the grey button "Raw" near the top the page that comes up.
-
-5. Use your browser menu to save file to disk (such as "File / Save
-    Page As...").
-
-
-
-
-## Setup
-
-This example assumes that you want to retrieve one month worth of
-e-trigger counts and patient information.
-
-1. Find the first day of the current month (e.g., if today is Feb 19,
-    you rewind to find Feb 1).
-
-2. Subtract two more months from that (so you get Dec 1) if you are
-    running `Lung.sql`. Subtract *three months* if you are running
-    `Fobt.sql`.
-
-3. Set `sp_start` equal to that (such as `set @sp_start='2019-12-01
-00:00:00'`).
-
-4. Set `sp_end` to the end of that month (such as `set
-@sp_end='2019-12-31 23:59:59'`).
-
-5. You need to set your sta3n and sta6a. You can do this by
-commenting/uncommenting code in lines 100--124 for `Lung.sql`, or
-lines 118--146 for `Fobt.sql`.
-
-6. Done! Other variables like `fu_period` can be left as-is.
+4. From Step 3, add Cancer Registry Entries to a table (select only
+the earliest for any given type of cancer for any given patient).
+Then, for patients from Step 3 that do not have cancer registry
+entries, add the First-Time Diagnostic Code occurrences to that table
+by selecting only the earliest diagnostic code occurrences from Step
+3. This table now contains the collection of Diagnosis Events within
+the study parameters.
 
 
 
 
-## Running code
+# Exclusion
 
-1. Start your operational access to the data warehouse via your usual
-    method (e.g., desktop or Citrix connection to SQL Server Management
-    Studio software). Login to a SQL server (e.g.
-    `vhacdwa01.vha.med.va.gov`) and authenticate (using either
-    username such as `vha01\vhabhs...` plus password, or using Windows
-    authentication).
-
-2. *Recommended:* Run sections of the SQL file sequentially (for
-example, lines 1--198 of `Fobt.sql` cover the first two `INSERT INTO`
-operations concerning tables that were newly created), inspecting for
-errors.
-
-    *Alternatively:* run the query all at once, inspecting for errors.
+1. From Step 4, select only records for patients who've had previous
+records in the health system for at least the Prior History Period (to
+ensure that the patients are "enrolled" in the health system).
 
 
 
 
-## Viewing and validating data
+# Numerator
 
-- To view patients with positive lung e-triggers, run the following
-SQL, after `Lung.sql` completes: `select * from
-#Lung_Sta3n528_3_Ins_U_TriggerPos`
+1. Get a list of all cancer records in the Search Period for the
+Cancer of Study. This includes (a) Cancer Registry Entries as well
+as (b) diagnostic code occurrences for the Study Cancer (*this part is
+optional -- the current code does this but later filters these
+occurrences out as we are not currently using them to determine cancer
+incidence*).
 
-- For lung counts, `Lung_Sta3n528_4_01_Count` should display automatically.
+2. Using the same methodology as in Step 1, get a list of all cancer
+records in the exclusion period prior to the search period for the
+cancer of study.
 
-- To view patients with positive colorectal e-triggers, run the
-following SQL, after `Fobt.sql` completes: `select * from
-#FOBT_Sta3n528_5_Ins_U_TriggerPos`
+3. Remove all cancer records from Step 1 for patients that were also
+identified in the cancer records in Step 2.
 
-- For colorectal counts, `FOBT_Sta3n528_5_Ins_X_count` should display
-  automatically.
+4. From Step 3, add Cancer Registry Entries to a table (select only
+the earliest for any given type of cancer for any given patient).
+Then, for patients from Step 3 that do not have cancer registry
+entries, add the First-Time Diagnostic Code occurrences to that table
+by selecting only the earliest diagnostic code occurrences from Step
+3. This table now contains the collection of Diagnosis Events within
+the study parameters.
 
-The site personnel doing **validation** should receive the
-"Ins_U_TriggerPos" tables (which will contain PHI, so don't send
-outside your station). You may review all, or randomly select a few
-patients with positive e-trigger, and securely transmit last name and
-last 4 of SSN from these patients to the reviewer, who will validate
-via CPRS that the sample patients have a positive red flag inside the
-time period of interest.
+5. Select for all potential emergency care events in the Potential
+Lookback Search Period. This table now contains the collection of
+Emergency Care Events within the study parameters.
 
-Final note: The VA Corporate Data Warehouse releases patch updates
-periodically, and this might require ongoing minor changes/updates to
-SQL code, by each site analyst. Standard codes (CPT, ICD, ICDProc,
-LOINC, Stop code, etc.) tend to change every year, with addition of new
-codes and removal of old codes. These changes require corresponding
-updates in the SQL code. Important note here is that you only add new
-codes to the SQL; do *not* remove the old ones (this is so the e-trigger
-continues to capture usage of both the historical and new codes).
+6. Select for dyads of Diagnosis Events and Emergency Care Events for
+each patient such that the Emergency Care Event falls within the
+lookback period for the Diagnosis Event.
 
 
+
+
+# Output
+
+1. EP Numerator: Output all records from the table created in the
+Numerator Exclusion section where the cancer was **identified via
+Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*)
+
+2. EP Denominator: Output all records from the table created in the
+Denominator Exclusion section where the cancer was **identified via
+Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*)
+
+3. Stage I: Output all records from the table created in the
+Denominator Exclusion section where the cancer was identified via
+**Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*) and the cancer is stage I
+
+4. Stage II: Output all records from the table created in the
+Denominator Exclusion section where the cancer was identified via
+**Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*) and the cancer is stage II
+
+5. Stage III: Output all records from the table created in the
+Denominator Exclusion section where the cancer was identified **via
+Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*) and the cancer is stage III
+
+6. Stage IV: Output all records from the table created in the
+Denominator Exclusion section where the cancer was identified **via
+Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*) and the cancer is stage IV
+
+7. Stage "Other": Output all records from the table created in the
+Denominator Exclusion section where the cancer was identified **via
+Cancer Registry Entry** (*we are not counting any other types of
+cancer diagnoses at this time*) and the cancer is not stage I, II,
+III, or IV
+
+8. Early-Stage Presentations: Add up Step 3 and Step 4 tables
+
+9. Late-Stage Presentations: Add up Step 5 and Step 6 tables
+
+
+
+
+# Parameters
+
+1. Set up Parameters
+
+    a. Search Period Start = 2019-01-01
+
+    b. Search Period Length = 12 months
+
+    c. Exclusion Period Length = -50 years (Length of time prior to
+       Search Period Start to look for previous cancer records to
+       exclude patients)
+
+    d. Lookback Period Length = -30 days (Length of time an inpatient
+       encounter must occur prior to a cancer diagnosis to qualify the
+       diagnosis as an emergency)
+
+    e. Prior History Period = 730 days (Length of time prior to cancer
+       diagnosis date for which the patient needs to have previous
+       records of being in the health system)
+
+
+
+
+# Terminology
+
+- Cancer of Study: The cancer being studied in a particular eMeasure.
+
+- Diagnosis Event: A first-time discovery of the cancer of study.
+
+- Cancer Registry Entry: An entry in the cancer registry from which we
+may infer a Diagnosis Event occurred.
+
+- First-Time Cancer Code Occurrence: The first occurrence of a
+diagnostic code for a cancer in a patient's medical record, from which
+we may infer a Diagnosis Event occurred.
+
+- Pre-Diagnosis Emergency Care Event: Emergency care preceding the
+Diagnosis Event that is related to some pre-diagnosis manifestation of
+the cancer of study.
+
+- Emergency Cancer Diagnosis: A Diagnosis Event preceded by a
+Pre-Diagnosis Emergency Care Event within some Lookback Period.
+
+- Emergency Cancer Diagnosis Record: A record containing the following
+fields:
+
+    - Patient ID
+    - Pre-Diagnosis Emergency Care Event ID
+    - Pre-Diagnosis Emergency Care Event Start Date
+    - Pre-Diagnosis Emergency Care Event Location
+    - Diagnosis Event ID
+    - Diagnosis Event Start Date
+    - Diagnosis Event Location
+
+- Search Period Start: The date from which to search for Emergency
+Cancer Diagnoses.
+
+- Search Period Length: Length of time from `Search Period Start` over
+which the search will be conducted.
+
+- Search Period: The range of dates encompassed by `Search Period
+Start + Search Period Length` over which the search is conducted.
+
+- Exclusion Period Length: Length of time prior to `Search Period
+Start` over which diagnostic data will be collected for each patient
+to exclude them from the study if they have a prior cancer diagnosis.
+
+- Exclusion Period: The range of dates encompassed by `Search Period
+Start - Exclusion Period Length` over which data for exclusion is
+collected.
+
+- Lookback Period Length: The period of time prior to each Diagnosis
+Event over which a Pre-Diagnosis Emergency Care Event may occur.
+
+- Lookback Period: The range of dates encompassed by `Diagnosis Event
+Start Date - Lookback Period Length` over which a Pre-Diagnosis
+Emergency Care Event may occur for each Diagnosis Event.
+
+- Potential Lookback Search Period: The range of dates encompassed by
+`Search Period Start - Lookback Period Length` to `Search Period Start
++ Search Period Length`.
+
+- Search Region: The geographic region within a health system over
+which a search is conducted.
+
+- Prior History Period: The minimum period of time prior to a
+Diagnosis Event for which a patient must have some documentation of
+healthcare encounters within a health system to qualify as having a
+history of receiving care from that health system.
 
 
 
