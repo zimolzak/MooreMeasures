@@ -47,26 +47,30 @@ Include or not?? Also talks about missed test, not dqm.
 Defaults that we used in our initial development and validation
 studies are listed in parentheses.
 
+Cancer of Interest:
+: The cancer being studied in a particular eMeasure (*e.g.,* lung,
+colorectal).
+
 Search Period Start:
-: The date from which to search for Emergency
-Cancer Diagnoses (2019-01-01).
+: The date from which to search for Emergency Cancer Diagnoses
+(2019-01-01).
 
 Search Period duration:
-: Length of time from `Search Period Start` over
-which the search will be conducted (12 months).
+: Length of time from `Search Period Start` over which the search will
+be conducted (12 months).
 
 Exclusion Period duration:
-: Length of time prior to Search Period Start to look for
-previous cancer records to exclude patients (50 years).
+: Length of time prior to Search Period Start to look for previous
+cancer records to exclude patients (50 years).
 
 Lookback Period duration:
-: Length of time an inpatient encounter must occur prior to a
-cancer diagnosis to qualify the diagnosis as an emergency (30 days).
+: Length of time an inpatient encounter must occur prior to a cancer
+diagnosis to qualify the diagnosis as an emergency (30 days).
 
 Prior History duration:
-: Length of time prior to cancer diagnosis date for which
-the patient needs to have previous records of being in the health
-system (730 days).
+: Length of time prior to cancer diagnosis date for which the patient
+needs to have previous records of being in the health system (730
+days).
 
 FIXME. Is he supposed to have only a visit $v$, with age of visit
 $a_v$ that is more than the 3 years? Or must have visits before *and
@@ -81,10 +85,10 @@ $$\exists v \exists w ([a_v > 3] \land [a_w \le 3])$$
 
 # Denominator
 
-1. Retrieve all cancer records in the Search Period for the Cancer of
-Study, using cancer registry entries[^option]. Select only the
-earliest diagnosis date, for the given cancer, for the given patient,
-in the Search Period.
+- Retrieve all first-time cancer diagnoses in the Search Period for
+the Cancer of Interest, using cancer registry entries[^option]. Select
+only the earliest diagnosis date, for the given cancer, for the given
+patient, in the Search Period.
 
 [^option]: Initially we defined cancer diagnoses as cancer registry
 **or** visit diagnostic codes (ICD-10). The current SQL code does this
@@ -92,25 +96,29 @@ but later filters these occurrences out. Our development and
 validation work uses only cancer registry---not diagnostic codes---to
 define new cancer diagnoses.
 
-## Exclusions
+
+
+
+# Exclusions
 
 These patients will appear in *neither* the numerator *nor* the
 denominator.
 
-1. Using the same methodology (cancer registry) used to define as in Step 1, exclude
-all patients with a cancer record in the exclusion period, prior to
-the search period, for the cancer of study.
+- Using the same methodology (cancer registry) used to define as in
+Step 1, exclude all patients with a cancer record in the exclusion
+period, prior to the search period, for the cancer of Interest.
 
-2. Exclude any patient without recorded primary care encounters in their health
-system within the Prior History period (to ensure that the patients are enrolled in and active
-users of the health system when the cancer could reasonably be found).
+- Exclude any patient without recorded primary care encounters in
+their health system within the Prior History period (to ensure that
+the patients are enrolled in and active users of the health system
+when the cancer could reasonably be found).
 
 
 
 
 # EP Numerator
 
-Any of those in the denominator, with emergency dept visit and/or
+- Any of those in the denominator, with emergency dept visit and/or
 unplanned[^appx] inpatient admission, in the
 Lookback Period.
 
@@ -121,63 +129,9 @@ Lookback Period.
 
 # Late stage numerator
 
-
-
-- Early-Stage Presentations: and the cancer is stage group I or II
-
-- Late-Stage Presentations: and the cancer is stage group III or IV
-
-FIXME Are unknown or stage not recorded *additionally* excluded from the late stage
-numerator (or denominator??).
-
-
-
-
-# Terminology
-
-Cancer of Study:
-: The cancer being studied in a particular eMeasure
-(*e.g.,* lung, colorectal).
-
-Diagnosis Event:
-: A first-time discovery of the cancer of study.
-
-Cancer Registry Entry:
-: An entry in the cancer registry from which we
-may infer a Diagnosis Event occurred.
-
-First-Time Cancer Code Occurrence:
-: The first occurrence of a
-diagnostic code for a cancer in a patient's medical record, from which
-we may infer a Diagnosis Event occurred.
-
-Pre-Diagnosis Emergency Care Event:
-: Emergency care preceding the
-Diagnosis Event that is related to some pre-diagnosis manifestation of
-the cancer of study.
-
-Emergency Cancer Diagnosis:
-: A Diagnosis Event preceded by a
-Pre-Diagnosis Emergency Care Event within some Lookback Period.
-
-Emergency Cancer Diagnosis Record:
-: A record containing the following
-fields:
-
-    - Patient ID
-    - Pre-Diagnosis Emergency Care Event ID
-    - Pre-Diagnosis Emergency Care Event Start Date
-    - Pre-Diagnosis Emergency Care Event Location
-    - Diagnosis Event ID
-    - Diagnosis Event Start Date
-    - Diagnosis Event Location
-
-
-Prior History Period:
-: The minimum period of time prior to a
-Diagnosis Event for which a patient must have some documentation of
-healthcare encounters within a health system to qualify as having a
-history of receiving care from that health system.
+- Any of those in the denominator, if the cancer is stage group III or
+IV. FIXME Are unknown or stage not recorded *additionally* excluded
+from the late stage numerator (or denominator??).
 
 
 
