@@ -17,7 +17,7 @@ all: $(files)
 ## manual of pseudocode (concatenation of 3)
 
 discovery-manual.md: $(dir)/discovery.md $(dir)/lung-icd10.md $(dir)/colon-icd10.md
-	cat $(dir)/discovery.md $(dir)/colon-icd10.md $(dir)/lung-icd10.md > $@
+	cat $+ > $@  # The auto variable $+ does all prereqs in order.
 
 ## graphviz
 
