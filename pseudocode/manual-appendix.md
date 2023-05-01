@@ -1,7 +1,7 @@
 # APPENDIX: Lung Red Flag Criteria
 
 1. Identify all patient records with abnormal chest X-Ray or CT result
-flagged by radiologist as "suspicious for malignancy" ^1^
+flagged by radiologist as "suspicious for malignancy" [^1]
 
 
 
@@ -64,7 +64,7 @@ board conference ^21^ **within 30 days after** imaging result date
 
 ## Footnotes (lung)
 
-^1^ CPT: X-Ray (71010, 71015, 71020, 71021, 71022, 71030, 71035,
+[^1]: CPT: X-Ray (71010, 71015, 71020, 71021, 71022, 71030, 71035,
 71101, 71111); CT (71275, 71250, 71270, 71260)
 
 ^2^ Based on status in mortality table
