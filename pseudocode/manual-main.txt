@@ -68,6 +68,15 @@ Prior History duration:
 the patient needs to have previous records of being in the health
 system (730 days).
 
+FIXME. Is he supposed to have only a visit $v$, with age of visit
+$a_v$ that is more than the 3 years? Or must have visits before *and
+within* 3 years?
+
+$$\exists v (a_v > 3)$$
+
+$$\exists v \exists w ([a_v > 3] \land [a_w \le 3])$$
+
+
 
 
 # Denominator
@@ -83,10 +92,7 @@ but later filters these occurrences out. Our development and
 validation work uses only cancer registry---not diagnostic codes---to
 define new cancer diagnoses.
 
-
-
-
-# Exclusions
+## Exclusions
 
 These patients will appear in *neither* the numerator *nor* the
 denominator.
@@ -105,12 +111,8 @@ users of the health system when the cancer could reasonably be found).
 # EP Numerator
 
 Any of those in the denominator, with emergency dept visit and/or
-unplanned[^appx] inpatient admission, in the Potential
-Lookback Search Period.
-
-6. Select for dyads of Diagnosis Events and Emergency Care Events for
-each patient such that the Emergency Care Event falls within the
-lookback period for the Diagnosis Event.
+unplanned[^appx] inpatient admission, in the
+Lookback Period.
 
 [^appx]: See appendix
 
@@ -170,23 +172,6 @@ fields:
     - Diagnosis Event Start Date
     - Diagnosis Event Location
 
-Lookback Period Length:
-: The period of time prior to each Diagnosis
-Event over which a Pre-Diagnosis Emergency Care Event may occur.
-
-Lookback Period:
-: The range of dates encompassed by `Diagnosis Event
-Start Date - Lookback Period Length` over which a Pre-Diagnosis
-Emergency Care Event may occur for each Diagnosis Event.
-
-Potential Lookback Search Period:
-: The range of dates encompassed by
-`Search Period Start - Lookback Period Length` to `Search Period Start
-+ Search Period Length`.
-
-Search Region:
-: The geographic region within a health system over
-which a search is conducted.
 
 Prior History Period:
 : The minimum period of time prior to a
