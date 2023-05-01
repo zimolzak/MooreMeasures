@@ -84,16 +84,10 @@ system)
 
 # Denominator
 
-1. Retrieve all cancer records in the Search Period for the
-Cancer of Study, using cancer registry entries.[^option]
-
-2. From Step 3, add Cancer Registry Entries to a table (select only
-the earliest for any given type of cancer for any given patient).
-Then, for patients from Step 3 that do not have cancer registry
-entries, add the First-Time Diagnostic Code occurrences to that table
-by selecting only the earliest diagnostic code occurrences from Step
-3. This table now contains the collection of Diagnosis Events within
-the study parameters.
+1. Retrieve all cancer records in the Search Period for the Cancer of
+Study, using cancer registry entries[^option]. Select only the
+earliest diagnosis date, for the given cancer, for the given patient,
+in the Search Period.
 
 [^option]: Initially we defined cancer diagnoses as cancer registry
 **or** visit diagnostic codes (ICD-10). The current SQL code does this
@@ -106,12 +100,15 @@ define new cancer diagnoses.
 
 # Exclusions
 
-1. Using the same methodology (cancer registry) as in Step 1, exclude
-all patients with a cancer records in the exclusion period, prior to
+These patients will appear in *neither* the numerator *nor* the
+denominator.
+
+1. Using the same methodology (cancer registry) used to define as in Step 1, exclude
+all patients with a cancer record in the exclusion period, prior to
 the search period, for the cancer of study.
 
-2. Exclude any patient with no visits (FIXME what type) in the Prior
-History Period (to ensure that the patients are enrolled in and active
+2. Exclude any patient without recorded primary care encounters in their health
+system within the Prior History period (to ensure that the patients are enrolled in and active
 users of the health system when the cancer could reasonably be found).
 
 
@@ -121,6 +118,8 @@ FIXME left off here
 
 
 # Numerator
+
+"emergency dept visit and/or unplanned inpatient admission".
 
 1. Get a list of all cancer records in the Search Period for the
 Cancer of Study. This includes (a) Cancer Registry Entries as well
