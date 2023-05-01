@@ -44,27 +44,29 @@ Include or not?? Also talks about missed test, not dqm.
 
 # Parameters
 
-Each parameter is listed, with the defaults we used in our initial
-development and validation studies.
+Defaults that we used in our initial development and validation
+studies are listed in parentheses.
 
 Search Period Start:
-: 2019-01-01
+: The date from which to search for Emergency
+Cancer Diagnoses (2019-01-01).
 
 Search Period duration:
-: 12 months
+: Length of time from `Search Period Start` over
+which the search will be conducted (12 months).
 
 Exclusion Period duration:
-: 50 years (Length of time prior to Search Period Start to look for
-previous cancer records to exclude patients)
+: Length of time prior to Search Period Start to look for
+previous cancer records to exclude patients (50 years).
 
 Lookback Period duration:
-: 30 days (Length of time an inpatient encounter must occur prior to a
-cancer diagnosis to qualify the diagnosis as an emergency)
+: Length of time an inpatient encounter must occur prior to a
+cancer diagnosis to qualify the diagnosis as an emergency (30 days).
 
 Prior History duration:
-: 730 days (Length of time prior to cancer diagnosis date for which
+: Length of time prior to cancer diagnosis date for which
 the patient needs to have previous records of being in the health
-system)
+system (730 days).
 
 
 
@@ -167,28 +169,6 @@ fields:
     - Diagnosis Event ID
     - Diagnosis Event Start Date
     - Diagnosis Event Location
-
-Search Period Start:
-: The date from which to search for Emergency
-Cancer Diagnoses.
-
-Search Period Length:
-: Length of time from `Search Period Start` over
-which the search will be conducted.
-
-Search Period:
-: The range of dates encompassed by `Search Period
-Start + Search Period Length` over which the search is conducted.
-
-Exclusion Period Length:
-: Length of time prior to `Search Period
-Start` over which diagnostic data will be collected for each patient
-to exclude them from the study if they have a prior cancer diagnosis.
-
-Exclusion Period:
-: The range of dates encompassed by `Search Period
-Start - Exclusion Period Length` over which data for exclusion is
-collected.
 
 Lookback Period Length:
 : The period of time prior to each Diagnosis
