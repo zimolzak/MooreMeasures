@@ -18,7 +18,7 @@ all: $(files)
 ## Intermediate file (1 markdown out of a concatenation of 3)
 # The auto variable $+ does all prereqs in order.
 
-$(final_title).md: $(dir)/manual-main.txt $(dir)/manual-appendix-1.md $(dir)/manual-appendix-2.md
+$(final_title).md: $(dir)/manual-main.txt $(dir)/manual-appendix.md
 	cat $+ > $@
 
 ## graphviz
