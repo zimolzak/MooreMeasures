@@ -18,30 +18,6 @@ adapted to other cancers. The code has support for some other cancers
 
 
 
-# Details FIXME
-
-Include or not?? Also talks about missed test, not dqm.
-
-> In general, the code proceeds by: 1. defining the red flags that
-> warrant additional evaluation for cancer (often labs or imaging), 2.
-> excluding other explanations for the red flags, such as already
-> diagnosed colon cancer, or known cause of bleeding in the upper GI
-> tract (often based on ICD/CPT codes),
-
-> As an example, the e-trigger for colorectal cancer identifies
-> patients with positive fecal blood tests or iron deficiency anemia,
-> and then excludes patients with any of the following: advanced age,
-> dece... These two e-triggers answer the question, "How do you find
-> (in the database) patients who had a test that shows a possibility
-> of cancer, but who have **not** had timely follow-up?" Further
-> details about exactly what constitutes exclusion or follow-up can be
-> found in the e-trigger manual appendices. Non-VA sites should
-> consult these appendices, as well as SQL code in order to
-> reimplement the e-triggers in local SQL.
-
-
-
-
 # Parameters
 
 Defaults that we used in our initial development and validation
