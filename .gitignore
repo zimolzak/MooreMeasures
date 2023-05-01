@@ -1,17 +1,23 @@
+# binaries
 *.docx
 *.pdf
 *~
 *.bundle
-
-.DS_Store
 consort.png
+
+# generated
+outputs/*.md
+
+# other files
+.DS_Store
 .Rproj.user
 .RData
 .Rhistory
-discovery-manual.md
 
+# dirs
 .ipynb_checkpoints/
 external-data-gitignore/
 
+# force track 2 docx
 !mm2 moore english pseudocode ep emergency one_pager 20210706.docx
 !planned_readmissions_codes.docx

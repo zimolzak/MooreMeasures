@@ -1,5 +1,5 @@
-files = consort.pdf consort.png
-files += README.pdf README.docx discovery-manual.pdf discovery-manual.docx
+final_title = cancer-dqm-manual
+files = consort.pdf consort.png $(final_title).pdf $(final_title).docx $(final_title).md
 dir = ../pseudocode
 
 .PHONY: all clean
@@ -7,17 +7,19 @@ dir = ../pseudocode
 all: $(files)
 
 ## Main pseudocode
+## Note, md files all live in outputs/ directory
 
-%.pdf: $(dir)/%.md
+%.pdf: %.md
 	pandoc -o $@ $<
 
-%.docx: $(dir)/%.md
+%.docx: %.md
 	pandoc -o $@ $<
 
-## manual of pseudocode (concatenation of 3)
+## Intermediate file (1 markdown out of a concatenation of 3)
+# The auto variable $+ does all prereqs in order.
 
-discovery-manual.md: $(dir)/discovery.md $(dir)/lung-icd10.md $(dir)/colon-icd10.md
-	cat $+ > $@  # The auto variable $+ does all prereqs in order.
+$(final_title).md: $(dir)/manual-main.md $(dir)/manual-appendix-1.md $(dir)/manual-appendix-2.md
+	cat $+ > $@
 
 ## graphviz
 
