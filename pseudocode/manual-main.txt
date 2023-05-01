@@ -4,12 +4,16 @@
 
 # Overview
 
-This manual outlines procedures for implementing a digital quality measure (dQM) to assess cancer diagnostic quality. There are two main measures.
+This manual outlines procedures for implementing a digital quality
+measure (dQM) to assess cancer diagnostic quality. There are two main
+measures.
 
 1. Rate of cancers diagnosed as an emergency (outcome measure)
 2. Rate of cancers diagnosed at advanced stage (outcome measure)
 
-We focus mainly on lung and colorectal cancer, but the measures can be adapted to other cancers. The code has support for some other cancers (*e.g.,* prostate).
+We focus mainly on lung and colorectal cancer, but the measures can be
+adapted to other cancers. The code has support for some other cancers
+(*e.g.,* prostate).
 
 
 
@@ -49,23 +53,41 @@ the e-triggers in local SQL.
 
 
 
+
+# Parameters
+
+Each parameter is listed, with the defaults we used in our initial
+development and validation studies.
+
+Search Period Start:
+: 2019-01-01
+
+Search Period duration:
+: 12 months
+
+Exclusion Period duration:
+: 50 years (Length of time prior to Search Period Start to look for
+previous cancer records to exclude patients)
+
+Lookback Period duration:
+: 30 days (Length of time an inpatient encounter must occur prior to a
+cancer diagnosis to qualify the diagnosis as an emergency)
+
+Prior History duration:
+: 730 days (Length of time prior to cancer diagnosis date for which
+the patient needs to have previous records of being in the health
+system)
+
+
+
+
+
 # Denominator
 
-1. Get a list of all cancer records in the Search Period for the
-Cancer of Study. This includes (a) Cancer Registry Entries as well
-as (b) diagnostic code occurrences for the Study Cancer (*this part is
-optional -- the current code does this but later filters these
-occurrences out as we are not currently using them to determine cancer
-incidence*).
+1. Retrieve all cancer records in the Search Period for the
+Cancer of Study, using cancer registry entries.[^option]
 
-2. Using the same methodology as in Step 1, get a list of all cancer
-records in the exclusion period prior to the search period for the
-cancer of study.
-
-3. Remove all cancer records from Step 1 for patients that were also
-identified in the cancer records in Step 2.
-
-4. From Step 3, add Cancer Registry Entries to a table (select only
+2. From Step 3, add Cancer Registry Entries to a table (select only
 the earliest for any given type of cancer for any given patient).
 Then, for patients from Step 3 that do not have cancer registry
 entries, add the First-Time Diagnostic Code occurrences to that table
@@ -73,15 +95,28 @@ by selecting only the earliest diagnostic code occurrences from Step
 3. This table now contains the collection of Diagnosis Events within
 the study parameters.
 
+[^option]: Initially we defined cancer diagnoses as cancer registry
+**or** visit diagnostic codes (ICD-10). The current SQL code does this
+but later filters these occurrences out. Our development and
+validation work uses only cancer registry---not diagnostic codes---to
+define new cancer diagnoses.
 
 
 
-# Exclusion
 
-1. From Step 4, select only records for patients who've had previous
-records in the health system for at least the Prior History Period (to
-ensure that the patients are "enrolled" in the health system).
+# Exclusions
 
+1. Using the same methodology (cancer registry) as in Step 1, exclude
+all patients with a cancer records in the exclusion period, prior to
+the search period, for the cancer of study.
+
+2. Exclude any patient with no visits (FIXME what type) in the Prior
+History Period (to ensure that the patients are enrolled in and active
+users of the health system when the cancer could reasonably be found).
+
+
+
+FIXME left off here
 
 
 
@@ -165,32 +200,14 @@ III, or IV
 
 
 
-# Parameters
-
-1. Set up Parameters
-
-    a. Search Period Start = 2019-01-01
-
-    b. Search Period Length = 12 months
-
-    c. Exclusion Period Length = -50 years (Length of time prior to
-       Search Period Start to look for previous cancer records to
-       exclude patients)
-
-    d. Lookback Period Length = -30 days (Length of time an inpatient
-       encounter must occur prior to a cancer diagnosis to qualify the
-       diagnosis as an emergency)
-
-    e. Prior History Period = 730 days (Length of time prior to cancer
-       diagnosis date for which the patient needs to have previous
-       records of being in the health system)
 
 
 
 
 # Terminology
 
-- Cancer of Study: The cancer being studied in a particular eMeasure.
+- Cancer of Study: The cancer being studied in a particular eMeasure
+  (*e.g.,* lung, colorectal).
 
 - Diagnosis Event: A first-time discovery of the cancer of study.
 
