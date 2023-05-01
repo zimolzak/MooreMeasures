@@ -119,10 +119,7 @@ when the cancer could reasonably be found).
 # EP Numerator
 
 - Any of those in the denominator, with emergency dept visit and/or
-unplanned[^appx] inpatient admission, in the
-Lookback Period.
-
-[^appx]: See appendix
+**unplanned** inpatient admission, in the Lookback Period.
 
 
 
@@ -130,7 +127,7 @@ Lookback Period.
 # Late stage numerator
 
 - Any of those in the denominator, if the cancer is stage group III or
-IV. FIXME Are unknown or stage not recorded *additionally* excluded
+IV - FIXME Are unknown or stage not recorded *additionally* excluded
 from the late stage numerator (or denominator??).
 
 
