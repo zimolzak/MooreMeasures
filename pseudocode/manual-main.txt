@@ -95,7 +95,10 @@ when the cancer could reasonably be found).
 # EP Numerator
 
 - Any of those in the denominator, with emergency dept visit and/or
-**unplanned** inpatient admission, in the Lookback Period.
+**unplanned** inpatient admission[^planned], in the Lookback Period.
+
+[^planned]: See Appendix. See also Horwitz LI, *et al. J Hosp Med*.
+2015;10(10):670--677.
 
 
 
