@@ -4,6 +4,7 @@
 *~
 *.bundle
 consort.png
+*.ps
 
 # generated
 outputs/*.md
