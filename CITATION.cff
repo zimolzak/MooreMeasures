@@ -1,0 +1,31 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Development and Implementation of a Digital Quality
+  Measure of Emergency Cancer Diagnosis
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Paarth
+    family-names: Kapadia
+    affiliation: Baylor College of Medicine
+    orcid: 'https://orcid.org/0000-0003-3033-3351'
+  - given-names: Andrew
+    family-names: Zimolzak
+    email: zimolzak@bcm.edu
+    affiliation: Baylor College of Medicine
+    orcid: 'https://orcid.org/0000-0003-0973-5639'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.13259766
+repository-code: 'https://github.com/zimolzak/MooreMeasures'
+keywords:
+  - Colorectal Neoplasms / diagnosis
+  - 'Emergency Service, Hospital'
+  - Lung Neoplasms / diagnosis
+  - 'Quality Indicators, Health Care'
+license: MIT
