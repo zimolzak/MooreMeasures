@@ -1,0 +1,5 @@
+
+C20* and 154.1* for colorectal cancer
+C34* and 162* for lung cancer
+C61* and 185* for prostate cancer
+C25* and 157* for pancreatic cancer

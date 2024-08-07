@@ -1,11 +1,26 @@
-.ipynb_checkpoints/
-.DS_Store
-*.csv
+# binaries
 *.docx
 *.pdf
 *~
 *.bundle
 consort.png
+*.ps
+*.eps
+*.svg
+
+# generated
+outputs/*.md
+
+# other files
+.DS_Store
 .Rproj.user
 .RData
 .Rhistory
+
+# dirs
+.ipynb_checkpoints/
+external-data-gitignore/
+
+# force track 2 docx
+!mm2 moore english pseudocode ep emergency one_pager 20210706.docx
+!planned_readmissions_codes.docx

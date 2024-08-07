@@ -1,0 +1,116 @@
+% Digital Quality Measures of Cancer Diagnosis
+% Andrew Zimolzak, MD, MMSc
+% 2023-05-01
+
+# Overview
+
+This manual outlines procedures for implementing a digital quality
+measure (dQM) to assess cancer diagnostic quality. There are two main
+measures.
+
+1. Rate of cancers diagnosed as an emergency (outcome measure)
+2. Rate of cancers diagnosed at advanced stage (outcome measure)
+
+We focus mainly on lung and colorectal cancer, but the measures can be
+adapted to other cancers. The code has support for some other cancers
+(*e.g.,* prostate).
+
+
+
+
+# Parameters
+
+Defaults that we used in our initial development and validation
+studies are listed in parentheses.
+
+Cancer of Interest:
+: The cancer being studied in a particular eMeasure (*e.g.,* lung,
+colorectal).
+
+Search Period Start:
+: The date from which to search for Emergency Cancer Diagnoses
+(2019-01-01).
+
+Search Period duration:
+: Length of time from `Search Period Start` over which the search will
+be conducted (12 months).
+
+Exclusion Period duration:
+: Length of time prior to Search Period Start to look for previous
+cancer records to exclude patients (50 years).
+
+Lookback Period duration:
+: Length of time an inpatient encounter must occur prior to a cancer
+diagnosis to qualify the diagnosis as an emergency (30 days).
+
+Prior History duration:
+: Length of time prior to cancer diagnosis date for which the patient
+needs to have previous records of being in the health system (730
+days).
+
+FIXME. Is he supposed to have only a visit $v$, with age of visit
+$a_v$ that is more than the 3 years? Or must have visits before *and
+within* 3 years?
+
+$$\exists v (a_v > 3)$$
+
+$$\exists v \exists w ([a_v > 3] \land [a_w \le 3])$$
+
+
+
+
+# Denominator
+
+- Retrieve all first-time cancer diagnoses in the Search Period for
+the Cancer of Interest, using cancer registry entries[^option]. Select
+only the earliest diagnosis date, for the given cancer, for the given
+patient, in the Search Period.
+
+[^option]: Initially we defined cancer diagnoses as cancer registry
+**or** visit diagnostic codes (ICD-10). The current SQL code does this
+but later filters these occurrences out. Our development and
+validation work uses only cancer registry---not diagnostic codes---to
+define new cancer diagnoses.
+
+
+
+
+# Exclusions
+
+These patients will appear in *neither* the numerator *nor* the
+denominator.
+
+- Using the same methodology (cancer registry) used to define as in
+Step 1, exclude all patients with a cancer record in the exclusion
+period, prior to the search period, for the cancer of Interest.
+
+- Exclude any patient without recorded primary care encounters in
+their health system within the Prior History period (to ensure that
+the patients are enrolled in and active users of the health system
+when the cancer could reasonably be found).
+
+
+
+
+# EP Numerator
+
+- Any of those in the denominator, with emergency dept visit and/or
+**unplanned** inpatient admission[^planned], in the Lookback Period.
+
+[^planned]: See Appendix. See also Horwitz LI, *et al. J Hosp Med*.
+2015;10(10):670--677.
+
+
+
+
+# Late stage numerator
+
+- Any of those in the denominator, if the cancer is stage group III or
+IV - FIXME Are unknown or stage not recorded *additionally* excluded
+from the late stage numerator (or denominator??).
+
+
+
+---
+
+
