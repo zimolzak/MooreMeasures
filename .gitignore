@@ -5,6 +5,8 @@
 *.bundle
 consort.png
 *.ps
+*.eps
+*.svg
 
 # generated
 outputs/*.md

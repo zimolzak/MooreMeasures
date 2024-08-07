@@ -1,7 +1,7 @@
 final_title = cancer-dqm-manual
 files = consort.pdf consort.png $(final_title).pdf $(final_title).docx $(final_title).md
 dir = ../pseudocode
-files += flow-diagram-figure.ps
+files += flow-diagram-figure.ps consort.eps consort.svg
 
 .PHONY: all clean
 
@@ -32,6 +32,12 @@ consort.pdf: ../consort.dot
 
 flow-diagram-figure.ps: ../consort.dot
 	dot -Tps -o $@ $<
+
+%.eps: ../%.dot
+	dot -Teps -o $@ $<
+
+%.svg: ../%.dot
+	dot -Tsvg -o $@ $<
 
 ## clean
 
